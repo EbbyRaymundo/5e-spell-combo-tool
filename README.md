@@ -1,6 +1,28 @@
 # 5e Spell Combo Tool
 This tool is a database with an API for querying and adding custom 5e spells. The spells intended to be added to the database are standard, XYZ, Fusion, and Link spells. Rather than adding Synchro spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and Accel Synchro targets.
 
+## Database Schema
+
+![Entity Relationship Diagram](Spell_database_diagram.png)
+
+### Justifications
+
+Each table has had a carefully considered reason for existing. Some variables are expected to change as new spellcasting methods or added, the existing systems are improved, or I just think of a more helpful way to organize the tables.
+
+#### Spell
+
+Most variables in the Spell table have redundancy but do not show a problematic many-to-many relationship like which class spell lists that a spell belongs to. This needs a table for itself, otherwise we'd need a list within a variable. I am still undecided if I'm happy with the "has_upcast_effect" variable or if I should replace that with the upcast effect, remove the "NOT NULL" constraint, and pull the upcast effect out of the descripton. 
+
+There are a few fields that could be standardized but the utility of doing so would not be high at all. For example, the casting times which are equivalent to 1 reaction all have a trigger condition. The condition could be pulled out and given its own variable but for the functionality of the database, the LIKE function works just fine to look for the "1 Reaction" substring.
+
+#### Class
+
+The class spell lists that a spell belongs to is usually a list. This requires a junction table to avoid having a list within a variable.
+
+#### Fusion
+
+Fusion spells require at least 2 different spells as their components. Many-to-many relationship that requires a junction table.
+
 ## Supported Extra Deck spellcasting Methods
 The following spellcasting methods are supported by the database.
 
