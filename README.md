@@ -112,6 +112,18 @@ Link spells take a vast amount of resources to develop since the circuit pattern
 
 Pendulum spellcasting and Delve spellcasting are unsupported since Delve spellcasting only relies on spell slots and has no dependencies on other spells. This could later be changed if they are confirmed to have levels and maybe an associated spell school. XYZ would be in a similar situation but has an associated Link spell, and have Ranks which are similar enough to Levels. Pendulum spellcasting is just a matter of knowing the associated rules. It does not require keeping track of any new spells.
 
+### Pendulum Spellcasting
+
+1. The user must have the ability to cast spells innately.
+2. The user must have both hands-free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff.
+3. The user must have a number of sorcery points equal to the level of the spell they wish to cast.
+4. The user does not consume their bonus action, however, the user can only use their bonus action to XYZ, Synchro, or Fusion cast.
+5. The user can use other sorcery points, but only to perform the other spellcasting methods.
+6. Pendulum scales last until the end of the encounter.
+7. The concentration limit still applies.
+8. All spells resolve simultaneously.
+
+To perform any type of Pendulum Cast, a mage sets the Pendulum scales by consuming 2 different leveled spell slots, then casts their hand to the sky as the magical energy swings between these 2 visible spells. The energy then exits the resulting hole in space, casting the spells the mage wishes to cast. To Pendulum cast, one must consume a level of sorcery points equal to the total levels of the spells they are casting simultaneously, and they can only cast a number of spells equal to their proficiency bonus.
 
 
 
