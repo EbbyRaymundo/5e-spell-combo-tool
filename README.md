@@ -1,7 +1,8 @@
 # 5e spell Combo Tool
 This tool is a database with an API for querying and adding custom 5e spells. The spells intended to be added to the database are standard, XYZ, Fusion, and Link spells. Rather than adding Synchro spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and Accel Synchro targets.
 
-## Extra Deck Spellcasting Methods
+## Supported Extra Deck spellcasting Methods
+The following spellcasting methods are supported by the database.
 
 ### Synchro Spellcasting
 
@@ -79,3 +80,38 @@ XYZ spell creation is entirely up to GM discretion. Try to keep in mind what spe
 9. Rank 9 spells
    - **Around the World**: A galaxy forms around you. You are the axis of its creation, the feeling of the planet's rotations fills you with great power. A power in which you can redirect others’ powers for your own. May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. While this spell has material, any battle damage done to you is negated and instead inflicted on the one dealing the damage. As a reaction, you can detach one material and target one opponent: negate the effects of any magic spells or items that they currently have active on them for 1 hour. As an action, you can detach one material: cast the spell Time Stop with an additional base round.
    - **The True King of all Calamities**: A large spectral dragon hovers over you, its very presence terrifying those who oppose the caster. May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. While this spell has material, your enemies cannot regain hit points. As a reaction, you may detach one material: until the beginning of your next turn, your enemies may not cast spells targeting or attack you or your allies.
+
+### Link Spellcasting
+
+1. You must be at minimum a level 11 spellcaster.
+2. You must have at minimum 13 Intelligence.
+3. You must have both hands free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff.
+4. After a spell resolves or ends, it can be repurposed as material for a Link spell.
+5. A spell can’t be reabsorbed if it deals maximum damage.
+6. A spell can’t be reabsorbed if it is a cantrip.
+7. You can only store an amount of reabsorbed spells up to your PB.
+8. All stored spells are lost on a Long Rest.
+9. A Link spell’s effect can be reused, and lasts for as many minutes as its Link rating.
+10. You can only cast each Link spell once per Rest.
+
+To perform Link spellcasting, the caster summons a portal with empty magical circuit slots using their focus in one hand, and with the other hand, sends the saved spell energy into the corresponding circuits. The effect of this completed circuit manifests as a construct emerging from the portal.
+
+#### What kind of Link spells can I use?
+
+Link spells take a vast amount of resources to develop since the circuit pattern is unique to every Link spell, and require a vast amount of trial and error. Creating a Link spell should be made as a way to improve spellcasting efficiency, not necessarily to create new spells.
+
+1. Link 2 spells
+   - **Verte Anaconda**: As an action, Link 2 spells. You can spend ¼ of your max HP to cast any “Fusion” or “Polymerization” spell instead of consuming a spell slot.
+   - **Chris-chan Halqifibrax**: As an action, Link 1 synchro spell and 1 other spell. When you Synchro cast, you can tune the spell without expending a spell slot if the upcast is 3 levels or lower. As a reaction, you can dispel this Link spell and immediately Synchro cast any spell without expending any resources.
+   - **Electrumite**: As an action, Link 2 pendulum cast spells. When you Link cast this spell, recover a spell slot used during the pendulum scaling. As an action, you can reabsorb one of your already-set pendulum scales, then cast a spell of the same level as the scale you just absorbed using sorcery points. Then, you can change the scale at no cost, then take another action to pendulum cast only 1 spell.
+   - **I:P Masquerena**: As an action reaction, Link 2 non-Link spells. As a reaction, tThis Link spell can be used as Link material before the end of its duration. A Link spell that uses this spell as Link material can’t be counterspelled or dispelled and is immune to anti-magic fields.
+   - **Ahashina**: As an action, Link 2 spells that were the same level. When you XYZ cast a spell that uses 2 materials and is the same rank as the level of the linked spells, the XYZ spell requires only 1 spell slot and the associated number of sorcery points. If you XYZ spellcast while this Link spell is active, target one creature within 60 feet: cast Fireball on them as a free action. 
+
+
+## Unsupported Extra Deck Spellcasting Methods
+
+Pendulum spellcasting and Delve spellcasting are unsupported since Delve spellcasting only relies on spell slots and has no dependencies on other spells. This could later be changed if they are confirmed to have levels and maybe an associated spell school. XYZ would be in a similar situation but has an associated Link spell, and have Ranks which are similar enough to Levels. Pendulum spellcasting is just a matter of knowing the associated rules. It does not require keeping track of any new spells.
+
+
+
+
