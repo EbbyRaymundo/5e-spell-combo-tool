@@ -1,4 +1,4 @@
-# 5e spell Combo Tool
+# 5e Spell Combo Tool
 This tool is a database with an API for querying and adding custom 5e spells. The spells intended to be added to the database are standard, XYZ, Fusion, and Link spells. Rather than adding Synchro spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and Accel Synchro targets.
 
 ## Supported Extra Deck spellcasting Methods
