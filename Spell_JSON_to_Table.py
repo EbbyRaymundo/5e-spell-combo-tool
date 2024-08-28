@@ -1,4 +1,3 @@
-import json
 import sqlite3
 import pandas as pd
 
@@ -47,36 +46,7 @@ def pandas_format_JSON(JSON_name: str):
 	spell_table["duration"] = spell_table["duration"].apply(lambda duration: duration.replace("Concentration, ", "").capitalize())
 	spell_table["spell_type"] = "standard" # every spell is standard since we'll add XYZ, Fusion, Links later
 
-	return spell_table.infer_objects(copy = False)
-
-
-def python_format_JSON(JSON_name: str):
-	"""
-	Use the JSON library in Python to read in the JSON as a
-	dictionary, then format the dictionary to easily convert
-	into a table. Due to a revision that uses Pandas instead,
-	this function is no longer necessary.
-	"""
-	with open(JSON_name, "r") as spells_file:
-		spells = json.load(spells_file)
-
-	for spell, values in spells.items():
-
-		# True and False will be changed in a later step
-		# with R since sqlite and R use TRUE and FALSE
-		if "Concentration, " in values["casting_time"]:
-			values["casting_time"] = values["casting_time"].replace("Concentration, ", "")
-			spell["concentration": False]
-
-		else:
-			values["concentration": True]
-
-		values["has_upcast_effect": True] if "At Higher Levels" in values["description"] else values["has_upcast_effect": False]
-
-		# Every spell in this JSON is a standard spell. Special spells will be added later.
-		values["spell_type": "standard"]
-
-	return spells
+	return spell_table.infer_objects(copy = False) # may have to force the "Object" types into strings later.
 
 def main():
 	
