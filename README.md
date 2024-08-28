@@ -125,5 +125,15 @@ Pendulum spellcasting and Delve spellcasting are unsupported since Delve spellca
 
 To perform any type of Pendulum Cast, a mage sets the Pendulum scales by consuming 2 different leveled spell slots, then casts their hand to the sky as the magical energy swings between these 2 visible spells. The energy then exits the resulting hole in space, casting the spells the mage wishes to cast. To Pendulum cast, one must consume a level of sorcery points equal to the total levels of the spells they are casting simultaneously, and they can only cast a number of spells equal to their proficiency bonus.
 
+### Delve Casting
 
+1. The user must have the ability to cast spells innately.
+2. The user must have a number of sorcery points (or equivalent) equal to the highest spell level used at the time of casting.
+3. The user must have both their magic focus and a 5 ft. cube of space for the item they are infusing. 
+4. The user loses one spell slot that is within 2 levels of the highest spell slot cast to perform the Ritual. The spell slot is unusable until the Delve spell is expended/lost.
+5. Items infused by Delve casting may hold the magic for a maximum of 1 week.
+6. The user must spend at least 1 hour casting this spell.
+7. Delve casting requires at least one item.
+8. One other caster may assist you in Delve casting, and split the costs. Any creature assisting in the casting must have access to the spell slots needed to cast, even if they are not using said slots. Some spells require enough resources that 2 casters are required in order for it to be cast.
 
+To cast a Delve spell, the user will require their magic focus as well as an item to focus your magical energy on. You, the object, and the area around you glows with a mist-like magical energy. During this process, the user(s) slowly release(es) their magic energy over time, allowing them to create new spells using multiple spell slots. The user maintains the magic of the spell by having the item slowly drain energy from the user, hence the locked off spell slot.
