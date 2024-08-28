@@ -28,7 +28,7 @@ has_concentration boolean.
 """
 	
 
-def pandas_format_JSON(JSON_name: str):
+def format_spell_JSON(JSON_name: str):
 	"""
 	Read the JSON file into a dataframe directly. Use dataframe
 	operations to add the missing data members for each spell.
@@ -48,10 +48,20 @@ def pandas_format_JSON(JSON_name: str):
 
 	return spell_table.infer_objects(copy = False) # may have to force the "Object" types into strings later.
 
+def create_spell_table(spell_DataFrame: pd.core.frame.DataFrame):
+
+	connection = sqlite3.connect("Gestalt.db")
+
+	spell_DataFrame.to_sql(name = "Spell", con = connection, index_label = "spell_id")
+
+	connection.close()
+
 def main():
 	
-	main_spell_table = pandas_format_JSON("PHB_spell_data/spells.json")
-	#python_format_JSON()
+	#main_spell_table = format_spell_JSON("PHB_spell_data/spells.json")
+	#create_spell_table(main_spell_table)
+
+	return 0
 
 
 if __name__ == "__main__":
