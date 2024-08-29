@@ -65,6 +65,8 @@ For example, if a mage has the 1st-level spell Mage Armor active, they can consu
 
 ### XYZ Spellcasting
 
+XYZ spells have Ranks instead of Levels. If you run them this way, they can't be Counterspelled and are unaffected by Dispel Magic. You can instead still consider them to be Levels. For the sake of simplicity, they will be shown as Levels in the database and is left as a user decision to choose to run them as Ranks instead.
+
 1. The user must have the ability to cast spells innately.
 2. The user must have both hands-free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff. 
 3. The user must have a number of sorcery points equal to the rank of the spell they wish to cast.
@@ -104,6 +106,8 @@ XYZ spell creation is entirely up to GM discretion. Try to keep in mind what spe
    - **The True King of all Calamities**: A large spectral dragon hovers over you, its very presence terrifying those who oppose the caster. May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. While this spell has material, your enemies cannot regain hit points. As a reaction, you may detach one material: until the beginning of your next turn, your enemies may not cast spells targeting or attack you or your allies.
 
 ### Link Spellcasting
+
+Link spells have Link Ratings instead of Levels. If you run them this way, they can't be Counterspelled and are unaffected by Dispel Magic. You can instead consider them to be Levels. For the sake of simplicity, they will be shown as Levels in the database and is left as a user decision to choose to run them as Link Ratings instead.
 
 1. You must be at minimum a level 11 spellcaster.
 2. You must have at minimum 13 Intelligence.
