@@ -139,9 +139,13 @@ def format_spell_csv(csv_name: str):
 	optional_availability = optional_availability.melt(id_vars = "spell_name", value_name = "classes").drop("variable", axis = 1) # pivot longer
 	optional_availability.dropna(axis = 0, inplace = True)
 
+	all_availability = pd.merge(class_availability, optional_availability, how = "outer")
+	all_availability.dropna(inplace = True)
+	all_availability = all_availability[all_availability.classes != ""]
+
 	#spell_table.to_html("main_spell_table.html")
-	#class_availability.to_html("class_availability.html")
-	optional_availability.to_html("optional_availability.html")
+	all_availability.to_html("all_availability.html")
+	print(all_availability)
 
 	return spell_table
 
