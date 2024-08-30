@@ -39,14 +39,63 @@ def format_spell_JSON(JSON_name: str):
 	# pull the spell names out of the row indices, give them their own 
 	# named column, and change row indices into auto-incrementing integers
 	spell_table.reset_index(inplace = True, names = "spell")
-	spell_table["has_upcast_effect"] = spell_table["description"].apply(lambda spell_description: "At Higher Levels" in spell_description)
+
+	# TODO: Do the entire upcast effect in the "upcast_effect" column
+	# insead of just doing a boolean here. Will have to do a substring
+	# and trim out the upcast portion. Remove "At Higher Levels" since
+	# that's implicit if it has an upcast effect.
+	spell_table["upcast_effect"] = spell_table["description"].apply(lambda spell_description: "At Higher Levels" in spell_description)
 	spell_table["concentration"] = spell_table["duration"].apply(lambda spell_duration: "Concentration" in spell_duration)
 
+	# TODO: replace this line with the Pandas .replace() function.
 	# "Concentration, " can be cut out of the duration since it doesn't entail any further description, unlike "has_upcast_effect"
 	spell_table["duration"] = spell_table["duration"].apply(lambda duration: duration.replace("Concentration, ", "").capitalize())
 	spell_table["spell_type"] = "standard" # every spell is standard since we'll add XYZ, Fusion, Links later
 
 	return spell_table.infer_objects(copy = False) # may have to force the "Object" types into strings later.
+
+
+def format_spell_csv(csv_name: str):
+
+	spell_table = pd.read_csv(
+		csv_name,
+		header = 0,
+		names = 
+			[
+				"spell_name",
+				"level",
+				"casting_time",
+				"duration",
+				"school",
+				"range",
+				"components",
+				"classes",
+				"optional_classes",
+				"description",
+				"upcast_effect"
+			],
+		keep_default_na = False) # leave blank spots blank
+	
+	spell_table["level"].replace( # numeric data will be considerably easier to use
+		{
+			"Cantrip": 0,
+			"1st": 1,
+			"2nd": 2,
+			"3rd": 3,
+			"4th": 4,
+			"5th": 5,
+			"6th": 6,
+			"7th": 7,
+			"8th": 8,
+			"9th": 9
+   		},
+		inplace = True
+	)
+
+	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.strip()
+	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ")
+
+	return spell_table
 
 def create_spell_table(spell_DataFrame: pd.core.frame.DataFrame):
 
@@ -58,8 +107,10 @@ def create_spell_table(spell_DataFrame: pd.core.frame.DataFrame):
 
 def main():
 	
-	#main_spell_table = format_spell_JSON("PHB_spell_data/spells.json")
+	#main_spell_table = format_spell_JSON("spell_data/spells.json")
 	#create_spell_table(main_spell_table)
+	main_spell_table = format_spell_csv("spell_data/all_5e_spells.csv")
+	main_spell_table.to_html("main_spell_table.html")
 
 	return 0
 
