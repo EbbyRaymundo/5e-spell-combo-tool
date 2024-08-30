@@ -119,13 +119,7 @@ def format_spell_csv(csv_name: str):
 	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
 	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)")
 
-	# this is the hard part
-	# TODO: listify the classes within the "classes" and "optional_classes" column, 
-	# potentially pivot longer, left join "classes" and ""optional_classes" together,
-	# and use that for the junction table between Spell and Class
-
-	#class_column = spell_table.filter(["spell_name", "classes"], axis = 1)
-	#optional_class_column = spell_table.filter(["spell_name", "optional_classes"], axis = 1)
+	# listify, expand, merge, and clear empty rows with the "classes" and "optional_classes" columns
 
 	class_availability = spell_table["classes"].str.split(", ", expand = True) # listify and expand the classes column
 	class_availability = pd.concat([spell_table["spell_name"], class_availability], axis = 1) # join with corresponding spell name
@@ -143,9 +137,19 @@ def format_spell_csv(csv_name: str):
 	all_availability.dropna(inplace = True)
 	all_availability = all_availability[all_availability.classes != ""]
 
-	#spell_table.to_html("main_spell_table.html")
-	all_availability.to_html("all_availability.html")
-	print(all_availability)
+	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock"], columns = ["classes"])
+	
+	spell_table.drop(columns = ["classes", "optional_classes"], inplace = True)
+
+	# outer join all_availability to dnd_classes, then outer join spell_table to result
+	# reset indices so that we can have index columns for both
+	spell_table.reset_index(inplace = True)
+	dnd_classes.reset_index(inplace = True)
+
+	junction_table = pd.merge(dnd_classes, all_availability, how = "outer")
+	junction_table = pd.merge(junction_table, spell_table, how = "outer", on = "spell_name")
+
+	junction_table.to_html("full_junction_table.html")
 
 	return spell_table
 
