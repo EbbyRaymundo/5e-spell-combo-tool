@@ -134,10 +134,14 @@ def format_spell_csv(csv_name: str):
 	# a few of them are optional only (I think due to unearthed arcana shenanigans)
 	class_availability.dropna(axis = 0, inplace = True)
 
-	optional_availability = spell_table["optional_classes"].str.split(", ", expand = True)
+	optional_availability = spell_table["optional_classes"].str.split(", ", expand = True) # listify and expand
+	optional_availability = pd.concat([spell_table["spell_name"], optional_availability], axis = 1) # join with corresponding spell name
+	optional_availability = optional_availability.melt(id_vars = "spell_name", value_name = "classes").drop("variable", axis = 1) # pivot longer
+	optional_availability.dropna(axis = 0, inplace = True)
 
 	#spell_table.to_html("main_spell_table.html")
-	class_availability.to_html("class_availability.html")
+	#class_availability.to_html("class_availability.html")
+	optional_availability.to_html("optional_availability.html")
 
 	return spell_table
 
