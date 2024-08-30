@@ -106,7 +106,26 @@ def format_spell_csv(csv_name: str):
 		inplace = True
 	)
 
+	# useless text; "At Higher Levels" in an upcast column is just redundant
 	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ")
+
+	# make boolean concentration column and clean up afterwards
+	spell_table["concentration"] = spell_table["duration"].str.contains("Concentration")
+	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ")
+	spell_table["duration"] = spell_table["duration"].str.capitalize()
+	spell_table["duration"].replace(
+		{
+			"minute": "Min.",
+			"minutes": "Min.",
+			"hours": "Hr.",
+			"hour": "Hr."
+		},
+		inplace = True
+	)
+
+	# make the boolean ritual column and clean up afterwards
+	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
+	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)")
 
 	return spell_table
 
