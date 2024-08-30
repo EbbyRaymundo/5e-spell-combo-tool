@@ -119,6 +119,26 @@ def format_spell_csv(csv_name: str):
 	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
 	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)")
 
+	# this is the hard part
+	# TODO: listify the classes within the "classes" and "optional_classes" column, 
+	# potentially pivot longer, left join "classes" and ""optional_classes" together,
+	# and use that for the junction table between Spell and Class
+
+	#class_column = spell_table.filter(["spell_name", "classes"], axis = 1)
+	#optional_class_column = spell_table.filter(["spell_name", "optional_classes"], axis = 1)
+
+	class_availability = spell_table["classes"].str.split(", ", expand = True) # listify and expand the classes column
+	class_availability = pd.concat([spell_table["spell_name"], class_availability], axis = 1) # join with corresponding spell name
+	class_availability = class_availability.melt(id_vars = "spell_name", value_name = "classes").drop("variable", axis = 1) # pivot longer
+	# some rows have to stay as None for now since the spell would get dropped entirely otherwise.
+	# a few of them are optional only (I think due to unearthed arcana shenanigans)
+	class_availability.dropna(axis = 0, inplace = True)
+
+	optional_availability = spell_table["optional_classes"].str.split(", ", expand = True)
+
+	#spell_table.to_html("main_spell_table.html")
+	class_availability.to_html("class_availability.html")
+
 	return spell_table
 
 def create_spell_table(spell_DataFrame: pd.core.frame.DataFrame):
@@ -134,7 +154,7 @@ def main():
 	#main_spell_table = format_spell_JSON("spell_data/spells.json")
 	#create_spell_table(main_spell_table)
 	main_spell_table = format_spell_csv("spell_data/all_5e_spells.csv")
-	main_spell_table.to_html("main_spell_table.html")
+	
 
 	return 0
 
