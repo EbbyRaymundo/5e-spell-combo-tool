@@ -74,6 +74,20 @@ def format_spell_csv(csv_name: str):
 				"description",
 				"upcast_effect"
 			],
+		converters = # removes any whitespace issues immediately
+			{
+				"spell_name": str.strip,
+				"level": str.strip,
+				"casting_time": str.strip,
+				"duration": str.strip,
+				"school": str.strip,
+				"range": str.strip,
+				"components": str.strip,
+				"classes": str.strip,
+				"optional_classes": str.strip,
+				"description": str.strip,
+				"upcast_effect": str.strip
+			},
 		keep_default_na = False) # leave blank spots blank
 	
 	spell_table["level"].replace( # numeric data will be considerably easier to use
@@ -92,7 +106,6 @@ def format_spell_csv(csv_name: str):
 		inplace = True
 	)
 
-	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.strip()
 	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ")
 
 	return spell_table
