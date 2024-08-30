@@ -111,17 +111,9 @@ def format_spell_csv(csv_name: str):
 
 	# make boolean concentration column and clean up afterwards
 	spell_table["concentration"] = spell_table["duration"].str.contains("Concentration")
-	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ")
-	spell_table["duration"] = spell_table["duration"].str.capitalize()
-	spell_table["duration"].replace(
-		{
-			"minute": "Min.",
-			"minutes": "Min.",
-			"hours": "Hr.",
-			"hour": "Hr."
-		},
-		inplace = True
-	)
+	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ").str.capitalize()
+	spell_table["duration"] = spell_table["duration"].str.replace(pat = "minute(s)?", repl = "Min.", regex = True)
+	spell_table["duration"] = spell_table["duration"].str.replace(pat = "hour(s)?", repl = "Hr.", regex = True)
 
 	# make the boolean ritual column and clean up afterwards
 	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
