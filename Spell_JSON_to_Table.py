@@ -137,7 +137,7 @@ def format_spell_csv(csv_name: str):
 	all_availability.dropna(inplace = True)
 	all_availability = all_availability[all_availability.classes != ""]
 
-	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock"], columns = ["classes"])
+	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger", "Monk"], columns = ["classes"])
 	
 	spell_table.drop(columns = ["classes", "optional_classes"], inplace = True)
 
@@ -146,8 +146,11 @@ def format_spell_csv(csv_name: str):
 	spell_table.reset_index(inplace = True)
 	dnd_classes.reset_index(inplace = True)
 
-	junction_table = pd.merge(dnd_classes, all_availability, how = "outer")
-	junction_table = pd.merge(junction_table, spell_table, how = "outer", on = "spell_name")
+	junction_table = pd.merge(dnd_classes, all_availability, how = "outer", on = "classes")
+	junction_table.to_html("all_availability.html")
+	# only need the index and spell_name from our main table
+	junction_table = pd.merge(junction_table, spell_table[["index", "spell_name"]], how = "outer", on = "spell_name")
+	junction_table["index_x"] = junction_table["index_x"].convert_dtypes(convert_integer = True)
 
 	junction_table.to_html("full_junction_table.html")
 
