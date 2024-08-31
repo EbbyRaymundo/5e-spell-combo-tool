@@ -112,12 +112,22 @@ def format_spell_csv(csv_name: str):
 	# make boolean concentration column and clean up afterwards
 	spell_table["concentration"] = spell_table["duration"].str.contains("Concentration")
 	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ").str.capitalize()
+
+	# "casting_time" is already abbreviated, so we'll be consistent with abbreviations
 	spell_table["duration"] = spell_table["duration"].str.replace(pat = "minute(s)?", repl = "Min.", regex = True)
 	spell_table["duration"] = spell_table["duration"].str.replace(pat = "hour(s)?", repl = "Hr.", regex = True)
+
+	# chose to use abbreviations in the "duration" column so I should be consistent
+	spell_table["range"] = spell_table["range"].str.replace(pat = "feet|foot", repl = "Ft.", regex = True)
+	spell_table["range"] = spell_table["range"].str.replace(pat = "mile(s)?", repl = "Mi.", regex = True)
 
 	# make the boolean ritual column and clean up afterwards
 	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
 	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)")
+
+	# make the spell_type column; all imported spells are "standard" since we'll be adding
+	# the Links and XYZ ourselves
+	spell_table["spell_type"] = "standard"
 
 	# listify, expand, merge, and clear empty rows with the "character_class" and "optional_classes" columns
 
@@ -147,15 +157,14 @@ def format_spell_csv(csv_name: str):
 	dnd_classes.reset_index(names = "class_id", inplace = True)
 
 	junction_table = pd.merge(dnd_classes, all_availability, how = "outer", on = "character_class")
-	junction_table.to_html("all_availability.html")
+
 	# only need the index and spell_name from our main table
 	junction_table = pd.merge(junction_table, spell_table[["spell_id", "spell_name"]], how = "outer", on = "spell_name")
 	junction_table["class_id"] = junction_table["class_id"].convert_dtypes(convert_integer = True)
 	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
 
-	junction_table.to_html("full_junction_table.html")
-
 	# TODO: rename column in Class table from "character_class" to "class" before exporting
+	spell_table.to_html("main_spell_table.html")
 
 	return spell_table
 
