@@ -107,11 +107,11 @@ def format_spell_csv(csv_name: str):
 	)
 
 	# useless text; "At Higher Levels" in an upcast column is just redundant
-	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ")
+	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ").str.strip()
 
 	# make boolean concentration column and clean up afterwards
 	spell_table["concentration"] = spell_table["duration"].str.contains("Concentration")
-	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ").str.capitalize()
+	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ").str.capitalize().str.strip()
 
 	# "casting_time" is already abbreviated, so we'll be consistent with abbreviations
 	spell_table["duration"] = spell_table["duration"].str.replace(pat = "minute(s)?", repl = "Min.", regex = True)
@@ -123,7 +123,7 @@ def format_spell_csv(csv_name: str):
 
 	# make the boolean ritual column and clean up afterwards
 	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
-	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)")
+	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)").str.strip()
 
 	# make the spell_type column; all imported spells are "standard" since we'll be adding
 	# the Links and XYZ ourselves
@@ -163,10 +163,8 @@ def format_spell_csv(csv_name: str):
 	junction_table["class_id"] = junction_table["class_id"].convert_dtypes(convert_integer = True)
 	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
 
-	# TODO: rename column in Class table from "character_class" to "class" before exporting
-	spell_table.to_html("main_spell_table.html")
-
 	return spell_table
+
 
 def create_spell_table(spell_DataFrame: pd.core.frame.DataFrame):
 
