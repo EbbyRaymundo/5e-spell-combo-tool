@@ -154,14 +154,18 @@ def format_spell_csv(csv_name: str):
 	# outer join all_availability to dnd_classes, then outer join spell_table to result
 	# reset indices so that we can have index columns for both
 	spell_table.reset_index(names = "spell_id", inplace = True)
-	dnd_classes.reset_index(names = "class_id", inplace = True)
+	dnd_classes.reset_index(names = "character_class_id", inplace = True)
 
 	junction_table = pd.merge(dnd_classes, all_availability, how = "outer", on = "character_class")
 
 	# only need the index and spell_name from our main table
 	junction_table = pd.merge(junction_table, spell_table[["spell_id", "spell_name"]], how = "outer", on = "spell_name")
-	junction_table["class_id"] = junction_table["class_id"].convert_dtypes(convert_integer = True)
+	junction_table["character_class_id"] = junction_table["character_class_id"].convert_dtypes(convert_integer = True)
 	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
+
+	spell_table.to_html("Spell_table.html")
+	junction_table.to_html("Spell_Class.html")
+	dnd_classes.to_html("Class.html")
 
 	return spell_table
 
