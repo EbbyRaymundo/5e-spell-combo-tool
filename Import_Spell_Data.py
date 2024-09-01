@@ -1,13 +1,22 @@
 import sqlite3
 import pandas as pd
 
-
+'''
+TODO: Break script into different files.
+- One script for creating tables and constraints
+- One script for initially populating the db
+- One script for updating the db with new spells
+	- Determine standard for importing spells
+'''
 
 def format_spell_JSON(JSON_name: str):
 	"""
-	Read the JSON file into a dataframe. Use dataframe
-	operations to add the missing data members for each spell.
-	Clean entries to remove unnecessary text from strings.
+	TODO: rework function to accept JSON from 5etools instead
+	of where they were originally sourced from ()
+	Read the JSON file containing initial batch of spells into
+	a dataframe. Use dataframe operations to add the missing data
+	members for each spell. Clean entries to remove unnecessary
+	text from strings.
 
 	JSON is in format:
 	{
