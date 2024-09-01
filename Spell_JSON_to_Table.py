@@ -163,6 +163,10 @@ def format_spell_csv(csv_name: str):
 	junction_table["character_class_id"] = junction_table["character_class_id"].convert_dtypes(convert_integer = True)
 	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
 
+	spell_table.to_html("images/Spell_table.html")
+	dnd_classes.to_html("images/Class_table.html")
+	junction_table.to_html("images/Spell_Class_table.html")
+
 	return spell_table, dnd_classes, junction_table
 
 
