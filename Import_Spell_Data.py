@@ -199,10 +199,12 @@ def create_class_table(class_DataFrame: pd.core.frame.DataFrame):
 	with sqlite3.connect("Gestalt.db") as connection:
 		class_DataFrame.to_sql(name = "Class", con = connection, index = False)
 
+
 def create_spell_class_table(spell_class_DataFrame):
 
 	with sqlite3.connect("Gestalt.db") as connection:
 		spell_class_DataFrame.to_sql(name = "Spell_Class", con = connection, index = False)
+
 
 def main():
 	
