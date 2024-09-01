@@ -1,37 +1,36 @@
 import sqlite3
 import pandas as pd
 
-"""
-JSON is in format:
 
-{
-	"spell_1" {
-		"casting_time": "action_type",
-		"components": "spell_components",
-		"description: "spell_description",
-		"duration": "spell_duration",
-		"level": spell_level (int),
-		"range": "spell_range",
-		"school": "spell_school"
-	}
-	"spell_2" {
-		...
-	}
-	...
-}
-
-To format for the database:
-- Remove concentration from description and add as
-has_concentration boolean.
-- Add has_upcast_effect as boolean.
-- Add spell_type (they're all "standard")
-"""
-	
 
 def format_spell_JSON(JSON_name: str):
 	"""
-	Read the JSON file into a dataframe directly. Use dataframe
+	Read the JSON file into a dataframe. Use dataframe
 	operations to add the missing data members for each spell.
+	Clean entries to remove unnecessary text from strings.
+
+	JSON is in format:
+	{
+		"spell_1" {
+			"casting_time": "action_type",
+			"components": "spell_components",
+			"description: "spell_description",
+			"duration": "spell_duration",
+			"level": spell_level (int),
+			"range": "spell_range",
+			"school": "spell_school"
+		}
+		"spell_2" {
+			...
+		}
+		...
+	}
+
+	To format for the database:
+	- Remove concentration from description and add as
+	has_concentration boolean.
+	- Add has_upcast_effect as boolean.
+	- Add spell_type (they're all "standard")
 	"""
 
 	spell_table = pd.read_json(JSON_name).transpose()
@@ -56,6 +55,25 @@ def format_spell_JSON(JSON_name: str):
 
 
 def format_spell_csv(csv_name: str):
+
+	"""
+	Read the csv from 5etools containing all spells currently available on the website,
+	clean entries to remove unnecessary information or create additional columns,
+	create Class and Spell_Class junction table.
+
+	To format the csv for the database:
+	- Rename column names to those matching the Gestalt ERD
+	- Remap all string names in "level" to their corresponding spell level as integers (cantrips == 0)
+	- Abbreviate "hour(s)" and "minute(s)" in "duration" column
+	- Remove "Concentration, " from "duration" and give it its own boolean column
+	- Remove " (ritual)" from "school" and give it its own boolean column
+	- Abbreviate "foot", "feet", "mile(s)" in "range" column
+	- Listify "character_class" and "optional_classes" column, expand them, pivot longer, then full outer join
+	- Remove "At Higher Levels. " from "upcast_effect"
+	- Create a table with all spellcasting classes (except you Monks that only have one spell)
+		- Subclasses are not considered since that data is irrelevant for to the purpose of the database
+	- Create a junction table between the spells and classes
+	"""
 
 	spell_table = pd.read_csv(
 		csv_name,
