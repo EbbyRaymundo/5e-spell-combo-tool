@@ -3,7 +3,7 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
 
 ## Database Schema
 
-![Entity Relationship Diagram](Gestalt_ERD.png)
+![Entity Relationship Diagram](images/Gestalt_ERD.png)
 
 ### Justifications
 
