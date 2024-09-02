@@ -1,4 +1,3 @@
-import sqlite3
 import pandas as pd
 
 '''
@@ -176,7 +175,7 @@ def format_spell_csv(csv_name: str):
 
 	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"], columns = ["character_class"])
 	
-	spell_table.drop(columns = ["character_class", "optional_classes"], inplace = True)
+	spell_table.drop(columns = ["character_class", "optional_classes"], inplace = True) # new tables made, no longer needed
 
 	# outer join all_availability to dnd_classes, then outer join spell_table to result
 	# reset indices so that we can have index columns for both
@@ -189,6 +188,7 @@ def format_spell_csv(csv_name: str):
 	junction_table = pd.merge(junction_table, spell_table[["spell_id", "spell_name"]], how = "outer", on = "spell_name")
 	junction_table["character_class_id"] = junction_table["character_class_id"].convert_dtypes(convert_integer = True)
 	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
+	junction_table = junction_table[junction_table.columns[[1, 0]]] # reorder columns to "spell_id", "character_class_id"
 
 	spell_table.to_html("images/Spell_table.html")
 	dnd_classes.to_html("images/Class_table.html")
@@ -196,33 +196,9 @@ def format_spell_csv(csv_name: str):
 
 	return spell_table, dnd_classes, junction_table
 
-
-def create_spell_table(spell_DataFrame: pd.core.frame.DataFrame):
-
-	with sqlite3.connect("Gestalt.db") as connection:
-		spell_DataFrame.to_sql(name = "Spell", con = connection, index = False)
-
-
-def create_class_table(class_DataFrame: pd.core.frame.DataFrame):
-
-	with sqlite3.connect("Gestalt.db") as connection:
-		class_DataFrame.to_sql(name = "Class", con = connection, index = False)
-
-
-def create_spell_class_table(spell_class_DataFrame):
-
-	with sqlite3.connect("Gestalt.db") as connection:
-		spell_class_DataFrame.to_sql(name = "Spell_Class", con = connection, index = False)
-
-
 def main():
 	
-	#main_spell_table = format_spell_JSON("spell_data/spells.json")
-	#create_spell_table(main_spell_table)
-	main_spell_table, classes_table, spell_class_table = format_spell_csv("spell_data/all_5e_spells.csv")
-	create_spell_table(main_spell_table)
-	create_class_table(classes_table)
-	create_spell_class_table(spell_class_table)
+	format_spell_csv("spell_data/all_5e_spells.csv")
 
 	return 0
 
