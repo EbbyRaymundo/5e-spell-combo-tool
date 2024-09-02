@@ -2,17 +2,20 @@ import sqlite3
 
 
 
-def add_XYZs():
+def add_XYZ(XYZ: list):
+
+	with sqlite3.connect("Gestalt.db") as connection:
+		gestalt_cursor = connection.cursor()
 
 	return
 
 
-def add_Links():
+def add_Link(Link: list):
 
 	return
 
 
-def add_Fusions():
+def add_Fusion(Fusion: list):
 
 	return
 
