@@ -43,7 +43,7 @@ def create_class_table(connection, class_DataFrame: pd.core.frame.DataFrame):
 		'''
 		CREATE TABLE Class(
 			character_class_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			character_class TEXT NOT NULL
+			character_class TEXT UNIQUE NOT NULL
 		)
 		'''
 	)
@@ -86,8 +86,8 @@ def main():
 	with sqlite3.connect("Gestalt.db") as connection:
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("spell_data/all_5e_spells.csv")
 
-		create_spell_table(connection, spell_table)
-		#create_class_table(connection, class_table)
+		#create_spell_table(connection, spell_table)
+		create_class_table(connection, class_table)
 		#create_spell_class_table(connection, spell_class_table)
 
 	return 0
