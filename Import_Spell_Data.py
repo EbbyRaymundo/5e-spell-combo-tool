@@ -1,11 +1,10 @@
 import pandas as pd
 
 '''
-TODO: Break script into different files.
-- One script for creating tables and constraints
-- One script for initially populating the db
-- One script for updating the db with new spells
-	- Determine standard for importing spells
+This file is for creating the dataframes that will populate the
+database tables. It can read either a JSON that is provided in
+the spell_data folder. It can also read a CSV from 5etools with
+any set of spells.
 '''
 
 def format_spell_JSON(JSON_name: str):

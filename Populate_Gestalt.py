@@ -3,7 +3,8 @@ import pandas as pd
 import Import_Spell_Data as import_spell
 '''
 This file is for creating tables for the Gestalt database,
-adding constraints and inserting with dataframes.
+adding constraints and populating with dataframes. This does
+not need to be run again.
 '''
 
 def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
