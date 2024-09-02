@@ -15,7 +15,7 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 		'''
 		CREATE TABLE Spell(
 			spell_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			spell_name TEXT NOT NULL,
+			spell_name TEXT UNIQUE NOT NULL,
 			level INTEGER NOT NULL,
 			casting_time TEXT NOT NULL,
 			duration TEXT NOT NULL,
@@ -31,7 +31,7 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 		'''
 		)
 	
-	spell_DataFrame.to_sql(name = "Spell", con = connection, if_exists = "replace", index = False)
+	spell_DataFrame.to_sql(name = "Spell", con = connection, if_exists = "append", index = False)
 
 
 def create_class_table(connection, class_DataFrame: pd.core.frame.DataFrame):
@@ -48,7 +48,7 @@ def create_class_table(connection, class_DataFrame: pd.core.frame.DataFrame):
 		'''
 	)
 
-	class_DataFrame.to_sql(name = "Class", con = connection, if_exists = "replace", index = False)
+	class_DataFrame.to_sql(name = "Class", con = connection, if_exists = "append", index = False)
 
 
 def create_spell_class_table(connection, spell_class_DataFrame: pd.core.frame.DataFrame):
@@ -66,7 +66,7 @@ def create_spell_class_table(connection, spell_class_DataFrame: pd.core.frame.Da
 		)
 		'''
 	)
-	spell_class_DataFrame.to_sql(name = "Spell_Class", con = connection, if_exists = "replace", index = False)
+	spell_class_DataFrame.to_sql(name = "Spell_Class", con = connection, if_exists = "append", index = False)
 
 def create_fusion_table(connection):
 	'''
