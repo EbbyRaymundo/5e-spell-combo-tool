@@ -60,7 +60,7 @@ def create_spell_class_table(connection, spell_class_DataFrame: pd.core.frame.Da
 		'''
 		CREATE TABLE Spell_Class(
 			spell_id INTEGER NOT NULL,
-			character_class_id INT NOT NULL,
+			character_class_id INTEGER NOT NULL,
 			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id),
 			FOREIGN KEY (character_class_id) REFERENCES Class(character_class_id)
 		)
@@ -86,9 +86,9 @@ def main():
 	with sqlite3.connect("Gestalt.db") as connection:
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("spell_data/all_5e_spells.csv")
 
-		#create_spell_table(connection, spell_table)
+		create_spell_table(connection, spell_table)
 		create_class_table(connection, class_table)
-		#create_spell_class_table(connection, spell_class_table)
+		create_spell_class_table(connection, spell_class_table)
 
 	return 0
 
