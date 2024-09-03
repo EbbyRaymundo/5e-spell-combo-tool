@@ -37,6 +37,10 @@ def add_Fusion(Fusion: list):
 	return
 
 def associate_classes(classes: list = None): # the argument should be an optional list
+	'''
+	This class takes a list of classes that have access to an extra deck spell.
+	If every class has access to it, then no arguments should be given.
+	'''
 
 	return
 
