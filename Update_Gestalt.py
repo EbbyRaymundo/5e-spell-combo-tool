@@ -64,8 +64,16 @@ def associate_classes(character_classes: list = None): # the argument should be 
 	If every class has access to it, then no arguments should be given.
 	'''
 
+	if character_classes is None:
+		yield
+
 	return
 
 def main():
 
 	return 0
+
+
+
+if __name__ == "__main__":
+	main()
