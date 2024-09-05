@@ -1,0 +1,6 @@
+name: spell_combo_tool
+channels:
+  - defaults
+dependencies:
+  - python=3.12.4
+  - pandas=2.2.2
