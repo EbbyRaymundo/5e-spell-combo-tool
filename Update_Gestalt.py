@@ -23,6 +23,8 @@ def add_XYZ(XYZ: list, character_classes: list = None):
 			XYZ
 			)
 
+		# TODO: join newly inserted spells with the character classes, then insert those into the Spell_Class table
+
 	return
 
 
@@ -41,6 +43,9 @@ def add_Link(Link: list, character_classes: list = None):
 			""",
 			list
 			)
+		
+		# TODO: join newly inserted spells with the character classes, then insert those into the Spell_Class table
+
 
 	return
 
