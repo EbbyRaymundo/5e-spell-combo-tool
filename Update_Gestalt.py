@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 
 '''
 TODO: potentially use Pandas to get values into dataframes
