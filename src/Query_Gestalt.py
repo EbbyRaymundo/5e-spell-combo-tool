@@ -34,8 +34,11 @@ def find_Fusion_target():
 
 def main():
 
-	for spell in find_Accel_Synchro_target("ray", "doyle"):
-		print(spell)
+	# test if error handling properly works for non-specific spell queries
+	#find_Accel_Synchro_target("ray", "doyle")
+
+	# test if error handling properly works for nonexistent query
+	# find_Accel_Synchro_taget("ploopy", "doyle"))
 
 	return 0
 
