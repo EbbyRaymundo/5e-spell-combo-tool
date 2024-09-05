@@ -5,7 +5,7 @@ TODO: potentially use Pandas to get values into dataframes
 before inserting them into tables.
 '''
 
-def add_XYZ(XYZ: list, classes: list = None):
+def add_XYZ(XYZ: list, character_classes: list = None):
 	'''
 	Add a list of XYZ spells into the Spell table and associate each XYZ
 	spell with every character class unless provided a list to specify.
@@ -19,15 +19,15 @@ def add_XYZ(XYZ: list, classes: list = None):
 			INSERT INTO Spell(spell_name, level, casting_time, duration, range, components, description, concentration, ritual, spell_type) 
 			VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0, 'XYZ')
 			""",
-			list
+			XYZ
 			)
 
 	return
 
 
-def add_Link(Link: list):
+def add_Link(Link: list, character_classes: list = None):
 	"""
-	Add a list of XYZ spells into the Spell table and associate each XYZ
+	Add a list of Link spells into the Spell table and associate each Link
 	spell with every character class unless provided a list to specify.
 	"""
 	with sqlite3.connect("Gestalt.db") as connection:
@@ -52,7 +52,7 @@ def add_Fusion(Fusion: list):
 
 	return
 
-def associate_classes(classes: list = None): # the argument should be an optional list
+def associate_classes(character_classes: list = None): # the argument should be an optional list
 	'''
 	This class takes a list of classes that have access to an extra deck spell.
 	If every class has access to it, then no arguments should be given.
