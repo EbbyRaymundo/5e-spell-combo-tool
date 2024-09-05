@@ -15,10 +15,10 @@ def find_Accel_Synchro_target(source_spell: str, synchro_route: str):
 		check_provided_spell = gestalt_cursor.fetchall()
 
 		if not check_provided_spell: # no spells were found with given name
-			raise Exception("No spell found with the provided spell name")
+			raise Exception("No spell found with the provided spell name.")
 		
 		elif len(check_provided_spell) > 1:
-			raise Exception(f"Multiple spells found with the provided spell name: {[spell[1] for spell in check_provided_spell]}")
+			raise Exception(f"Multiple spells found with the provided spell name: {[spell[1] for spell in check_provided_spell]}.")
 
 		return gestalt_cursor.fetchall()
 
@@ -38,7 +38,7 @@ def main():
 	#find_Accel_Synchro_target("ray", "doyle")
 
 	# test if error handling properly works for nonexistent query
-	# find_Accel_Synchro_taget("ploopy", "doyle"))
+	#find_Accel_Synchro_target("ploopy", "doyle")
 
 	return 0
 
