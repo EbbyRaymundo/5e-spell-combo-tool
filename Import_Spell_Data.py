@@ -9,12 +9,14 @@ any set of spells.
 
 def format_spell_JSON(JSON_name: str):
 	"""
-	TODO: rework function to accept JSON from 5etools instead
-	of where they were originally sourced from ()
 	Read the JSON file containing initial batch of spells into
 	a dataframe. Use dataframe operations to add the missing data
 	members for each spell. Clean entries to remove unnecessary
 	text from strings.
+
+	TODO: rework function to accept JSON from 5etools instead
+	of where they were originally sourced from :^)
+
 
 	JSON is in format:
 	{
@@ -155,10 +157,10 @@ def format_spell_csv(csv_name: str):
 	spell_table["spell_type"] = "standard"
 
 	# listify, expand, merge, and clear empty rows with the "character_class" and "optional_classes" columns
-
 	class_availability = spell_table["character_class"].str.split(", ", expand = True) # listify and expand the classes column
 	class_availability = pd.concat([spell_table["spell_name"], class_availability], axis = 1) # join with corresponding spell name
 	class_availability = class_availability.melt(id_vars = "spell_name", value_name = "character_class").drop("variable", axis = 1) # pivot longer
+	
 	# some rows have to stay as None for now since the spell would get dropped entirely otherwise.
 	# a few of them are optional only (I think due to unearthed arcana shenanigans)
 	class_availability.dropna(axis = 0, inplace = True)
