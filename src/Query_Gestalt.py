@@ -6,6 +6,13 @@ def find_Accel_Synchro_target(source_spell: str, synchro_route: str):
 	"""
 	Given a spell and Accel Synchro route (counterspelled, reaction, main action),
 	determine the available spell options.
+
+	Raises
+	------
+	No spell found with the provided spell name.
+		source_spell was not found in the database.
+	Multiple spells found with the provided spell name.
+		source_spell had multiple matches in the database.
 	"""
 
 	with sqlite3.connect("../Gestalt.db") as connection:
@@ -14,7 +21,8 @@ def find_Accel_Synchro_target(source_spell: str, synchro_route: str):
 
 		check_provided_spell = gestalt_cursor.fetchall()
 
-		if not check_provided_spell: # no spells were found with given name
+		# 
+		if not check_provided_spell:
 			raise Exception("No spell found with the provided spell name.")
 		
 		elif len(check_provided_spell) > 1:
