@@ -4,7 +4,7 @@ import Import_Spell_Data as import_spell
 '''
 This file is for creating tables for the Gestalt database,
 adding constraints and populating with dataframes. This does
-not need to be run again.
+not need to be run again by the user.
 '''
 
 def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
@@ -102,7 +102,7 @@ def create_spell_fusion_table(connection):
 def main():
 
 	with sqlite3.connect("Gestalt.db") as connection:
-		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("spell_data/all_5e_spells.csv")
+		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("../spell_data/all_5e_spells.csv")
 
 		#create_spell_table(connection, spell_table)
 		#create_class_table(connection, class_table)

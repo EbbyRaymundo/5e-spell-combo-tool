@@ -8,7 +8,7 @@ def find_Accel_Synchro_target(source_spell: str, synchro_route: str):
 	determine the available spell options.
 	"""
 
-	with sqlite3.connect("Gestalt.db") as connection:
+	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_name LIKE ?", [f"%{source_spell}%"])
 

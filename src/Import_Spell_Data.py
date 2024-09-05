@@ -191,15 +191,15 @@ def format_spell_csv(csv_name: str):
 	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
 	junction_table = junction_table[junction_table.columns[[1, 0]]] # reorder columns to "spell_id", "character_class_id"
 
-	spell_table.to_html("images/Spell_table.html")
-	dnd_classes.to_html("images/Class_table.html")
-	junction_table.to_html("images/Spell_Class_table.html")
+	spell_table.to_html("../images/Spell_table.html")
+	dnd_classes.to_html("../images/Class_table.html")
+	junction_table.to_html("../images/Spell_Class_table.html")
 
 	return spell_table, dnd_classes, junction_table
 
 def main():
 	
-	format_spell_csv("spell_data/all_5e_spells.csv")
+	format_spell_csv("../spell_data/all_5e_spells.csv")
 
 	return 0
 
