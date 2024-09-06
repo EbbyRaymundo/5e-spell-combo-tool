@@ -47,43 +47,30 @@ def find_Accel_Synchro_target(source_spell: str, synchro_route: int):
 		spell_level = source_spell[2]
 		spell_school = source_spell[5]
 
+		route_constraints = ""
+
 		if synchro_route == 0: # Synchro spell has just been counterspelled
-			gestalt_cursor.execute(
-				"""
-				SELECT *
-				FROM Spell
-				WHERE (casting_time == "Action" OR casting_time == "Bonus Action")
+			route_constraints = """
+				(casting_time == "Action" OR casting_time == "Bonus Action")
 				AND level > ?
 				AND school == ?
-				""",
-				(spell_level, spell_school)
-			)
-
+				"""
 		# could potentially add a check here to see if the input spell is a valid
 		# source spell (duration != "Instantaneous"). Spells are weird so we
 		# might just have to trust the caller.
 		elif synchro_route == 1: # ending active spell to cast a reaction spell
-			gestalt_cursor.execute(
-				"""
-				SELECT *
-				FROM Spell
-				WHERE casting_time == "Reaction"
+			route_constraints = """
+				casting_time == "Reaction"
 				AND level > ?
 				AND school == ?
-				""",
-				(spell_level, spell_school)
-			)
-
-		elif synchro_route == 2: # using main action, no limit on casting time
-			gestalt_cursor.execute(
 				"""
-				SELECT *
-				FROM Spell
-				WHERE level > ?
+		elif synchro_route == 2: # using main action, no limit on casting time
+			route_constraints = """
+				level > ?
 				AND school == ?
-				""",
-				(spell_level, spell_school)
-			)
+				"""
+
+		gestalt_cursor.execute(f"SELECT * FROM Spell WHERE {route_constraints}", (spell_level, spell_school))
 
 		return gestalt_cursor.fetchall()
 
@@ -103,7 +90,7 @@ def main():
 	#find_Accel_Synchro_target("ray", "doyle")
 
 	# test if error handling properly works for nonexistent query
-	for spell in find_Accel_Synchro_target("death w", 0):
+	for spell in find_Accel_Synchro_target("death ward", 2):
 		print(spell)
 
 	return 0
