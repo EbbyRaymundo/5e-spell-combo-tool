@@ -90,8 +90,8 @@ def main():
 	#find_Accel_Synchro_target("ray", "doyle")
 
 	# test if error handling properly works for nonexistent query
-	for spell in find_Accel_Synchro_target("death ward", 2):
-		print(spell)
+	#for spell in find_Accel_Synchro_target("death ward", 2):
+	#	print(spell)
 
 	return 0
 
