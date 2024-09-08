@@ -78,6 +78,7 @@ def create_fusion_table(connection):
 		'''
 		CREATE TABLE Fusion(
 			fusion_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			fusion_name TEXT UNIQUE NOT NULL,
 			effect TEXT UNIQUE NOT NULL
 		)
 		'''
