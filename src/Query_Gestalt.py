@@ -158,9 +158,6 @@ def get_main_action_Accel_Synchro():
 		return gestalt_cursor.fetchall()
 
 
-	return
-
-
 def find_Fusion_target():
 	"""
 	Given a spell, return any available Fusion spell targets.
