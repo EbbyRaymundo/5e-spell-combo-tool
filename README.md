@@ -54,9 +54,12 @@ For example, if a mage has the 1st-level spell Mage Armor active, they can consu
 
 ### Fusion Spellcasting
 
-1. When fusing two or more spells, the duration will typically be that of the shortest spell.
-2. For instantaneous spells, you can use your main action to cast the first spell for no effect, then use polymerization with a bonus action to retroactively fuse it.
-3. Cantrips count as a 1st level spell for the purposes of sorcery point cost.
+1. The user must have at least one level in a spontaneous spellcasting class.
+2. The combination of spells should produce a novel effect rather than "mashing" to spell effects together.
+3. The creation of Fusion spells should be reviewed by the DM.
+4. When fusing two or more spells, the duration will typically be that of the shortest spell.
+5. For instantaneous spells, you can use your main action to cast the first spell for no effect, then use polymerization with a bonus action to retroactively fuse it.
+6. Cantrips count as a 1st level spell for the purposes of sorcery point cost.
 
 #### What Fusion spells can I use?
 
@@ -67,11 +70,12 @@ For example, if a mage has the 1st-level spell Mage Armor active, they can consu
 
 XYZ spells have Ranks instead of Levels. If you run them this way, they can't be Counterspelled and are unaffected by Dispel Magic. You can instead still consider them to be Levels. For the sake of simplicity, they will be shown as Levels in the database and is left as a user decision to choose to run them as Ranks instead.
 
-1. The user must have the ability to cast spells innately.
-2. The user must have both hands-free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff. 
-3. The user must have a number of sorcery points equal to the rank of the spell they wish to cast.
-4. The user also consumes their bonus action.
-5. If one performs an XYZ Cast, they cannot use any other sorcery points that turn (besides for use of Empowered Spell).
+1. The user must have at least one level in a class that can cast 9th level spells.
+2. The user must have the ability to cast spells innately.
+3. The user must have both hands-free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff. 
+4. The user must have a number of sorcery points equal to the rank of the spell they wish to cast.
+5. The user also consumes their bonus action.
+6. If one performs an XYZ Cast, they cannot use any other sorcery points that turn (besides for use of Empowered Spell).
 
 To perform any type of XYZ Cast, a mage overlays the energy of their spell slots by moving their hands in a swirling motion, creating a golden-colored galaxy between them. The spell then exits the galaxy as it is cast.
 
