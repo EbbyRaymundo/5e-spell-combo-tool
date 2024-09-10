@@ -33,7 +33,7 @@ To Synchro Cast on their turn, the user consumes 1 leveled spell slot of level X
 2. The user must have both hands-free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff.
 3. The user must have a number of sorcery points equal to the level of the spell they wish to cast.
 4. The user also consumes their bonus action.
-If one performs a Synchro Cast, they cannot use any other sorcery points that turn (besides for use of Empowered Spell).
+If one performs a Synchro Cast, they cannot use any other sorcery points that turn (besides for use of Empowered Spell). There are no class restrictions on Synchro spellcasting.
 
 To perform any type of Synchro Cast, a mage redirects the energy of their spell slots by moving their hands in a circle while consuming the lower-leveled spell, creating an emerald ring of light, then pushing the energy of the higher-leveled spell outward.
 
