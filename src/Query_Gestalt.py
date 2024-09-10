@@ -3,6 +3,7 @@ import sqlite3
 
 # TODO: decide if I want to add error handling to the Accel Synchro getters to
 #		check if the input spell has a duration greater than Instantaneous.
+# TODO: change the getters to handle a list of str instead of a single input.
 def get_counterspelled_Accel_Synchro(source_spell: str):
 	"""
 	Given a spell with a duration greater than instantaneous, determine the
