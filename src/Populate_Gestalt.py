@@ -106,11 +106,11 @@ def main():
 		connection.execute("PRAGMA foreign_keys = ON")
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("../spell_data/all_5e_spells.csv")
 
-		create_spell_table(connection, spell_table)
-		create_class_table(connection, class_table)
-		create_spell_class_table(connection, spell_class_table)
-		create_fusion_table(connection)
-		create_spell_fusion_table(connection)
+		#create_spell_table(connection, spell_table)
+		#create_class_table(connection, class_table)
+		#create_spell_class_table(connection, spell_class_table)
+		#create_fusion_table(connection)
+		#create_spell_fusion_table(connection)
 
 	return 0
 
