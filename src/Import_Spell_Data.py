@@ -174,7 +174,6 @@ def format_spell_csv(csv_name: str):
 	optional_availability.dropna(inplace = True)
 
 	all_availability = pd.merge(class_availability, optional_availability, how = "outer")
-	all_availability.to_html("../images/Spell_Class_table_precut.html")
 
 	all_availability.replace(to_replace = "", value = pd.NA, inplace = True)
 	all_availability.dropna(inplace = True)
@@ -198,17 +197,6 @@ def format_spell_csv(csv_name: str):
 	
 	spell_table.drop(columns = ["character_class", "optional_classes"], inplace = True) # new tables made, no longer needed
 
-	# outer join all_availability to dnd_classes
-	#junction_table = pd.merge(all_availability, dnd_classes, how = "outer", on = "character_class")
-
-	# outer join spell_id, spell_name to junction table
-	#junction_table["character_class_id"] = junction_table["character_class_id"].convert_dtypes(convert_integer = True)
-	#junction_table.drop(columns = ["character_class"], inplace = True)
-
-	spell_table.to_html("../images/Spell_table.html")
-	dnd_classes.to_html("../images/Class_table.html")
-	all_availability.to_html("../images/Spell_Class_table.html")
-	
 	return spell_table, dnd_classes, all_availability
 
 def main():
