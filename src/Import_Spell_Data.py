@@ -112,7 +112,8 @@ def format_spell_csv(csv_name: str):
 				"optional_classes": str.strip,
 				"description": str.strip,
 				"upcast_effect": str.strip
-			}
+			},
+		na_values = [""]
 		)
 	
 	spell_table = spell_table.replace(
@@ -193,9 +194,16 @@ def format_spell_csv(csv_name: str):
 			"Ranger": '8'
 			}
    		}
-	).astype({"character_class": "int64"}, copy = False).reset_index(drop = True)
+	).astype({"character_class": "int64"}, copy = False)
+
+	all_availability.reset_index(drop = True, inplace = True) # index is spotty from the dropna()
+	# need to appropriately rename the column after remapping
+	all_availability.rename(columns = {"character_class": "character_class_id"}, inplace = True)
 	
 	spell_table.drop(columns = ["character_class", "optional_classes"], inplace = True) # new tables made, no longer needed
+	# empty upcast values were never filled with NAs by pandas in read_csv for some reason
+	spell_table.replace(to_replace = "", value = pd.NA, inplace = True)
+
 
 	return spell_table, dnd_classes, all_availability
 
