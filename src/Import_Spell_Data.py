@@ -1,5 +1,4 @@
 import pandas as pd
-
 '''
 This file is for creating the dataframes that will populate the
 database tables. It can read either a JSON that is provided in
@@ -8,7 +7,7 @@ any set of spells.
 '''
 
 def format_spell_JSON(JSON_name: str):
-	"""
+	'''
 	Read the JSON file containing initial batch of spells into
 	a dataframe. Use dataframe operations to add the missing data
 	members for each spell. Clean entries to remove unnecessary
@@ -40,7 +39,7 @@ def format_spell_JSON(JSON_name: str):
 	has_concentration boolean.
 	- Add has_upcast_effect as boolean.
 	- Add spell_type (they're all "standard")
-	"""
+	'''
 
 	spell_table = pd.read_json(JSON_name).transpose()
 
@@ -64,8 +63,7 @@ def format_spell_JSON(JSON_name: str):
 
 
 def format_spell_csv(csv_name: str):
-
-	"""
+	'''
 	Read the csv from 5etools containing all spells currently available on the website,
 	clean entries to remove unnecessary information or create additional columns,
 	create Class and Spell_Class junction table.
@@ -82,7 +80,7 @@ def format_spell_csv(csv_name: str):
 	- Create a table with all spellcasting classes (except you Monks that only have one spell)
 		- Subclasses are not considered since that data is irrelevant for to the purpose of the database
 	- Create a junction table between the spells and classes
-	"""
+	'''
 
 	spell_table = pd.read_csv(
 		csv_name,
@@ -114,10 +112,9 @@ def format_spell_csv(csv_name: str):
 				"optional_classes": str.strip,
 				"description": str.strip,
 				"upcast_effect": str.strip
-			},
-		keep_default_na = False) # leave blank spots blank
+			}
+		)
 	
-
 	spell_table = spell_table.replace(
 		{"level": {
 			"Cantrip": '0',
@@ -133,6 +130,8 @@ def format_spell_csv(csv_name: str):
 			}
    		}
 	).astype({"level": "int64"}, copy = False)
+
+	spell_table.rename_axis("spell_id", inplace = True)
 
 	# useless text; "At Higher Levels" in an upcast column is just redundant
 	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ").str.strip()
@@ -154,49 +153,63 @@ def format_spell_csv(csv_name: str):
 	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)").str.strip()
 
 	# make the spell_type column; all imported spells are "standard" since we'll be adding
-	# the Links and XYZ ourselves
+	# the Links and XYZ ourselves later on
 	spell_table["spell_type"] = "standard"
 
-	# listify, expand, merge, and clear empty rows with the "character_class" and "optional_classes" columns
-	class_availability = spell_table["character_class"].str.split(", ", expand = True) # listify and expand the classes column
-	class_availability = pd.concat([spell_table["spell_name"], class_availability], axis = 1) # join with corresponding spell name
-	class_availability = class_availability.melt(id_vars = "spell_name", value_name = "character_class").drop("variable", axis = 1) # pivot longer
-	
-	# some rows have to stay as None for now since the spell would get dropped entirely otherwise.
-	# a few of them are optional only (I think due to unearthed arcana shenanigans)
-	class_availability.dropna(axis = 0, inplace = True)
+	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"], columns = ["character_class"])
+	dnd_classes.rename_axis("character_class_id", inplace = True)
 
+	# listify, expand, and merge the class_availability with its corresponding spell_id
+
+	# listify and expand the classes column
+	class_availability = spell_table["character_class"].str.split(", ", expand = True)
+	class_availability = pd.concat([spell_table.index.to_series(), class_availability], axis = "columns")
+	class_availability = class_availability.melt(id_vars = "spell_id", value_name = "character_class").drop("variable", axis = "columns") # pivot longer
+	class_availability.dropna(inplace = True)
+
+	# repeat for the optional_availability column
 	optional_availability = spell_table["optional_classes"].str.split(", ", expand = True) # listify and expand
-	optional_availability = pd.concat([spell_table["spell_name"], optional_availability], axis = 1) # join with corresponding spell name
-	optional_availability = optional_availability.melt(id_vars = "spell_name", value_name = "character_class").drop("variable", axis = 1) # pivot longer
-	optional_availability.dropna(axis = 0, inplace = True)
+	optional_availability = pd.concat([spell_table.index.to_series(), optional_availability], axis = "columns")
+	optional_availability = optional_availability.melt(id_vars = "spell_id", value_name = "character_class").drop("variable", axis = "columns") # pivot longer
+	optional_availability.dropna(inplace = True)
 
 	all_availability = pd.merge(class_availability, optional_availability, how = "outer")
-	all_availability.dropna(inplace = True)
-	all_availability = all_availability[all_availability.character_class != ""]
+	all_availability.to_html("../images/Spell_Class_table_precut.html")
 
-	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"], columns = ["character_class"])
+	all_availability.replace(to_replace = "", value = pd.NA, inplace = True)
+	all_availability.dropna(inplace = True)
+
+	# this replaces with the corresponding character_class_id in
+	# the dnd_classes dataframe
+	all_availability = all_availability.replace(
+		{"character_class": {
+			"Wizard": '0',
+			"Cleric": '1',
+			"Sorcerer": '2',
+			"Bard": '3',
+			"Druid": '4',
+			"Artificer": '5',
+			"Paladin": '6',
+			"Warlock": '7',
+			"Ranger": '8'
+			}
+   		}
+	).astype({"character_class": "int64"}, copy = False).reset_index(drop = True)
 	
 	spell_table.drop(columns = ["character_class", "optional_classes"], inplace = True) # new tables made, no longer needed
 
-	# outer join all_availability to dnd_classes, then outer join spell_table to result
-	# reset indices so that we can have index columns for both
-	spell_table.reset_index(names = "spell_id", inplace = True)
-	dnd_classes.reset_index(names = "character_class_id", inplace = True)
+	# outer join all_availability to dnd_classes
+	#junction_table = pd.merge(all_availability, dnd_classes, how = "outer", on = "character_class")
 
-	junction_table = pd.merge(dnd_classes, all_availability, how = "outer", on = "character_class")
-
-	# only need the index and spell_name from our main table
-	junction_table = pd.merge(junction_table, spell_table[["spell_id", "spell_name"]], how = "outer", on = "spell_name")
-	junction_table["character_class_id"] = junction_table["character_class_id"].convert_dtypes(convert_integer = True)
-	junction_table.drop(columns = ["character_class", "spell_name"], inplace = True)
-	junction_table = junction_table[junction_table.columns[[1, 0]]] # reorder columns to "spell_id", "character_class_id"
+	# outer join spell_id, spell_name to junction table
+	#junction_table["character_class_id"] = junction_table["character_class_id"].convert_dtypes(convert_integer = True)
+	#junction_table.drop(columns = ["character_class"], inplace = True)
 
 	spell_table.to_html("../images/Spell_table.html")
 	dnd_classes.to_html("../images/Class_table.html")
-	junction_table.to_html("../images/Spell_Class_table.html")
-
-	return spell_table, dnd_classes, junction_table
+	all_availability.to_html("../images/Spell_Class_table.html")
+	
+	return spell_table, dnd_classes, all_availability
 
 def main():
 	
