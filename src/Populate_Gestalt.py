@@ -103,6 +103,7 @@ def create_spell_fusion_table(connection):
 def main():
 
 	with sqlite3.connect("../Gestalt.db") as connection:
+		connection.execute("PRAGMA foreign_keys = ON")
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("../spell_data/all_5e_spells.csv")
 
 		#create_spell_table(connection, spell_table)

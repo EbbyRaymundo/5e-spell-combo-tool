@@ -36,11 +36,12 @@ def add_XYZ(XYZ: tuple[str, int, str, str, str, str], character_classes: list[in
 
 	Returns
 	-------
-	spell_id: int
+	new_XYZ_id: int
 		spell_id of the newly added XYZ spell
 	"""
 	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
+		gestalt_cursor.execute("PRAGMA foreign_keys = ON")
 		# XYZ have no spell school, do not use concentration, can't be rituals, and have no upcast effects
 		gestalt_cursor.execute(
 			"""
@@ -51,14 +52,11 @@ def add_XYZ(XYZ: tuple[str, int, str, str, str, str], character_classes: list[in
 			)
 
 		new_XYZ_id = gestalt_cursor.lastrowid
-		spell_class_ids = associate_classes(new_XYZ_id, character_classes)
+		spell_class_ids = associate_classes(new_XYZ_id, character_classes, gestalt_cursor)
 
-		
+		gestalt_cursor.executemany("INSERT INTO Spell_Class VALUES (?, ?)", spell_class_ids)
 
-
-		# TODO: join newly inserted spells with the character classes, then insert those into the Spell_Class table
-
-	return
+		return new_XYZ_id
 
 
 def add_Link(Link: list, character_classes: list = None):
@@ -99,9 +97,22 @@ def associate_classes(spell_id: int, character_classes: list[int], gestalt_curso
 	
 def main():
 
-	with sqlite3.Connection("../Gestalt.db") as connection:
-		for class_spell_pair in associate_classes(530, [1, 2, 3, 6, 7], connection.cursor()):
-			print(class_spell_pair)
+	# (<XYZ_name>, <XYZ_rank>, <duration>, <range>, <components>, <description>)
+	starlight_blessing = (
+		"Starlight Blessing",
+		1,
+		"1 Hr.",
+		"Self",
+		"V, S, M (2 level 1 spell slots and 1 sorcery point)",
+		"A hole in space opens above the caster’s head, revealing a "
+		+ "beautiful, starry nebula. While this spell still has overlay "
+		+ "materials, you may reroll one attack roll per turn. You may "
+		+ "not know the result of the first attack roll and must take "
+		+ "the second roll. As a reaction, you may detach one overlay "
+		+ "material to make an opponent reroll an attack roll before the "
+		+ "result is declared."
+		)
+	add_XYZ(starlight_blessing, [0, 1, 2, 3, 4])
 
 	return 0
 
