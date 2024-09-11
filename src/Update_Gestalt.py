@@ -134,7 +134,7 @@ def add_Fusion(fusion: list[str, str], constituent_spells: list[int]):
 
 		gestalt_cursor.executemany(
 			"INSERT INTO Spell_Fusion VALUES (?, ?)",
-			[(spell_id, new_Fusion_id) for spell_id in constituent_spells] # Fusion[0] = list of spell_id's
+			[(spell_id, new_Fusion_id) for spell_id in constituent_spells]
 			)
 
 		return new_Fusion_id
