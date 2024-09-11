@@ -112,8 +112,7 @@ def format_spell_csv(csv_name: str):
 				"optional_classes": str.strip,
 				"description": str.strip,
 				"upcast_effect": str.strip
-			},
-		na_values = [""]
+			}
 		)
 	
 	spell_table = spell_table.replace(
