@@ -1,12 +1,14 @@
 import sqlite3
 import pandas as pd
 import Import_Spell_Data as import_spell
+
+
+
 '''
 This file is for creating tables for the Gestalt database,
 adding constraints and populating with dataframes. This does
 not need to be run again by the user.
 '''
-
 def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 	'''
 	Initialize the Spell table with constraints using SQL, then insert the
@@ -113,6 +115,7 @@ def main():
 		#create_spell_fusion_table(connection)
 
 	return 0
+
 
 if __name__ == "__main__":
 	main()

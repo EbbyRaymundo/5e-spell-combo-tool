@@ -1,11 +1,12 @@
 import sqlite3
 import pandas as pd
 
+
+
 '''
 TODO: potentially use Pandas to get values into dataframes
 before inserting them into tables.
 '''
-
 def add_XYZ(xyz: tuple[str, int, str, str, str, str], character_classes: list[int] = None):
 	"""
 	Add the XYZ spell into the Spell table and associate each XYZ
@@ -175,7 +176,6 @@ def main():
 	add_XYZ(starlight_blessing, [0, 1, 2, 3, 4])
 
 	return 0
-
 
 
 if __name__ == "__main__":

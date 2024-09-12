@@ -1,6 +1,7 @@
 import sqlite3
 
 
+
 # TODO: decide if I want to add error handling to the Accel Synchro getters to
 #		check if the input spell has a duration greater than Instantaneous.
 # TODO: change the getters to handle a list of str instead of a single input.
@@ -177,7 +178,6 @@ def main():
 	#	print(spell)
 
 	return 0
-
 
 
 if __name__ == "__main__":

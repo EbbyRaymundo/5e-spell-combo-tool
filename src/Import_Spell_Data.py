@@ -1,11 +1,13 @@
 import pandas as pd
+
+
+
 '''
 This file is for creating the dataframes that will populate the
 database tables. It can read either a JSON that is provided in
 the spell_data folder. It can also read a CSV from 5etools with
 any set of spells.
 '''
-
 def format_spell_JSON(JSON_name: str):
 	'''
 	Read the JSON file containing initial batch of spells into
@@ -211,6 +213,7 @@ def main():
 	format_spell_csv("../spell_data/all_5e_spells.csv")
 
 	return 0
+
 
 if __name__ == "__main__":
 	main()
