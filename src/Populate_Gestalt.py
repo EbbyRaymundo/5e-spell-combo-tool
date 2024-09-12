@@ -13,9 +13,15 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 	'''
 	Initialize the Spell table with constraints using SQL, then insert the
 	dataframe to populate.
+
+	Parameters
+	----------
+	connection: Connection
+	spell_DataFrame: DataFrame
+		DataFrame of the Spell table.
 	'''
 	connection.execute(
-		'''
+		"""
 		CREATE TABLE Spell(
 			spell_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			spell_name TEXT UNIQUE NOT NULL,
@@ -25,13 +31,13 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 			school TEXT,
 			range TEXT NOT NULL,
 			components TEXT NOT NULL,
-			description TEXT NOT NULL,
+			description TEXT UNIQUE NOT NULL,
 			upcast_effect TEXT,
 			concentration INTEGER CHECK (concentration IN (0, 1)) NOT NULL,
 			ritual INTEGER CHECK (concentration IN (0, 1)) NOT NULL,
 			spell_type TEXT NOT NULL
 		)
-		'''
+		"""
 		)
 	
 	spell_DataFrame.to_sql(name = "Spell", con = connection, if_exists = "append", index = True)
@@ -41,33 +47,46 @@ def create_class_table(connection, class_DataFrame: pd.core.frame.DataFrame):
 	'''
 	Initialize the Class table with the PK constraint, then insert the
 	dataframe to populate.
+
+	Parameters
+	----------
+	connection: Connection
+	class_DataFrame: DataFrame
+		DataFrame of the table.
 	'''
 	connection.execute(
-		'''
+		"""
 		CREATE TABLE Class(
 			character_class_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			character_class TEXT UNIQUE NOT NULL
 		)
-		'''
+		"""
 	)
 
 	class_DataFrame.to_sql(name = "Class", con = connection, if_exists = "append", index = True)
 
 
-def create_spell_class_table(connection, spell_class_DataFrame: pd.core.frame.DataFrame):
+def create_spell_class_table(connection: sqlite3.Connection, spell_class_DataFrame: pd.core.frame.DataFrame):
 	'''
 	Initialize the Spell_Class junction table with FK constraints, then insert
 	the dataframe to populate.
+
+	Parameters
+	----------
+	connection: Connection
+	spell_class_DataFrame: DataFrame
+		Junction table dataframe between the Spell and Class tables.
 	'''
 	connection.execute(
-		'''
+		"""
 		CREATE TABLE Spell_Class(
 			spell_id INTEGER NOT NULL,
 			character_class_id INTEGER NOT NULL,
-			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id),
-			FOREIGN KEY (character_class_id) REFERENCES Class(character_class_id)
+			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
+			FOREIGN KEY (character_class_id) REFERENCES Class(character_class_id) ON DELETE CASCADE,
+			PRIMARY KEY (spell_id, character_class_id)
 		)
-		'''
+		"""
 	)
 	spell_class_DataFrame.to_sql(name = "Spell_Class", con = connection, if_exists = "append", index = False)
 
@@ -77,29 +96,30 @@ def create_fusion_table(connection):
 	populated later.
 	'''
 	connection.execute(
-		'''
+		"""
 		CREATE TABLE Fusion(
 			fusion_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			fusion_name TEXT UNIQUE NOT NULL,
 			effect TEXT UNIQUE NOT NULL
 		)
-		'''
+		"""
 	)
 
 def create_spell_fusion_table(connection):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints. This
-	table will be populated later when the Fusion tables are added.
+	table will be populated later.
 	'''
 	connection.execute(
-		'''
+		"""
 		CREATE TABLE Spell_Fusion(
 			spell_id INTEGER NOT NULL,
 			fusion_id INTEGER NOT NULL,
-			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id),
-			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id)
+			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
+			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id) ON DELETE CASCADE,
+			PRIMARY KEY (spell_id, fusion_id)
 		)
-		'''
+		"""
 	)
 
 def main():
@@ -108,11 +128,11 @@ def main():
 		connection.execute("PRAGMA foreign_keys = ON")
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("../spell_data/all_5e_spells.csv")
 
-		#create_spell_table(connection, spell_table)
-		#create_class_table(connection, class_table)
-		#create_spell_class_table(connection, spell_class_table)
-		#create_fusion_table(connection)
-		#create_spell_fusion_table(connection)
+		create_spell_table(connection, spell_table)
+		create_class_table(connection, class_table)
+		create_spell_class_table(connection, spell_class_table)
+		create_fusion_table(connection)
+		create_spell_fusion_table(connection)
 
 	return 0
 
