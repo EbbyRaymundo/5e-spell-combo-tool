@@ -1,5 +1,26 @@
+
 # 5e Spell Combo Tool
 This tool is a database with an API for querying and adding custom 5e spells. The spells intended to be added to the database are standard, XYZ, Fusion, and Link spells. Rather than adding Synchro spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and Accel Synchro targets.
+
+- [5e Spell Combo Tool](#5e-spell-combo-tool)
+  - [Database Schema](#database-schema)
+    - [Justifications](#justifications)
+      - [Spell](#spell)
+      - [Class](#class)
+      - [Fusion](#fusion)
+  - [Supported Extra Deck spellcasting Methods](#supported-extra-deck-spellcasting-methods)
+    - [Synchro Spellcasting](#synchro-spellcasting)
+      - [Accelerated Synchro Spellcasting (A.K.A. Accel Synchro)](#accelerated-synchro-spellcasting-aka-accel-synchro)
+    - [Fusion Spellcasting](#fusion-spellcasting)
+      - [What Fusion spells can I use?](#what-fusion-spells-can-i-use)
+    - [XYZ Spellcasting](#xyz-spellcasting)
+      - [What kind of XYZ spells can I use?](#what-kind-of-xyz-spells-can-i-use)
+      - [Kite’s XYZ Spells](#kites-xyz-spells)
+    - [Link Spellcasting](#link-spellcasting)
+      - [What kind of Link spells can I use?](#what-kind-of-link-spells-can-i-use)
+  - [Unsupported Extra Deck Spellcasting Methods](#unsupported-extra-deck-spellcasting-methods)
+    - [Pendulum Spellcasting](#pendulum-spellcasting)
+    - [Delve Casting](#delve-casting)
 
 ## Database Schema
 
