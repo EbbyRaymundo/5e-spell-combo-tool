@@ -154,10 +154,8 @@ def format_spell_csv(csv_name: str):
 	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
 	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)").str.strip()
 
-	# make the spell_type column; all imported spells are "standard" since we'll be adding
-	# the Links and XYZ ourselves later on
-	spell_table["spell_type"] = "standard"
 
+	# construct DataFrame for the Class table
 	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"], columns = ["character_class"])
 	dnd_classes.rename_axis("character_class_id", inplace = True)
 
@@ -207,6 +205,13 @@ def format_spell_csv(csv_name: str):
 
 
 	return spell_table, dnd_classes, all_availability
+
+
+def import_default_xyz(csv_name: str):
+	'''
+	Read a csv containing the default homebrew XYZ spells
+	'''
+
 
 def main():
 	
