@@ -53,7 +53,7 @@ def add_XYZ(xyz: tuple[str, int, str, str, str, str, str], character_classes: li
 		# if no specifying class list given, use default character_class_id's for
 		# XYZ spells (any full caster class that can obtain 9th lvl spells)
 		if not character_classes:
-			character_classes = [*range(5)] # id's: [Wizard, Cleric, Sorc, Bard, Druid]
+			character_classes = list(*range(5)) # id's: [Wizard, Cleric, Sorc, Bard, Druid]
 
 		spell_class_ids = associate_classes(new_xyz_id, character_classes, gestalt_cursor)
 
