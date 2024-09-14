@@ -22,7 +22,7 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 	'''
 	connection.execute(
 		"""
-		CREATE TABLE Spell(
+		CREATE TABLE Spell (
 			spell_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			spell_name TEXT UNIQUE NOT NULL,
 			level INTEGER NOT NULL,
@@ -34,7 +34,7 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 			description TEXT UNIQUE NOT NULL,
 			upcast_effect TEXT,
 			concentration INTEGER CHECK (concentration IN (0, 1)) NOT NULL,
-			ritual INTEGER CHECK (concentration IN (0, 1)) NOT NULL,
+			ritual INTEGER CHECK (concentration IN (0, 1)) NOT NULL
 		)
 		"""
 		)
@@ -102,7 +102,7 @@ def create_xyz_table(connection, xyz_DataFrame: pd.core.frame.DataFrame):
 			duration TEXT NOT NULL,
 			range TEXT NOT NULL,
 			components TEXT NOT NULL,
-			description TEXT UNIQUE NOT NULL,
+			description TEXT UNIQUE NOT NULL
 		)
 		"""
 		)
@@ -131,7 +131,7 @@ def create_link_table(connection, link_DataFrame: pd.core.frame.DataFrame):
 			duration TEXT NOT NULL,
 			range TEXT NOT NULL,
 			components TEXT NOT NULL,
-			description TEXT UNIQUE NOT NULL,
+			description TEXT UNIQUE NOT NULL
 		)
 		"""
 		)
@@ -229,7 +229,7 @@ def create_link_class_table(connection: sqlite3.Connection, spell_class_DataFram
 		)
 		"""
 	)
-	spell_class_DataFrame.to_sql(name = "XYZ_Class", con = connection, if_exists = "append", index = False)
+	spell_class_DataFrame.to_sql(name = "Link_Class", con = connection, if_exists = "append", index = False)
 
 
 def main():
@@ -238,17 +238,20 @@ def main():
 		connection.execute("PRAGMA foreign_keys = ON")
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("../spell_data/all_5e_spells.csv")
 		xyz_table, xyz_class_table = import_spell.import_default_xyz("../spell_data/kites_xyz_spells.csv")
+		link_table, link_class_table = import_spell.import_default_links("../spell_data/aleisters_link_spells.csv")
 
 		# main tables
 		create_spell_table(connection, spell_table)
 		create_class_table(connection, class_table)
 		create_fusion_table(connection) # use add_fusion() to add these later
 		create_xyz_table(connection, xyz_table)
+		create_link_table(connection, link_table)
 
 		# junction tables
 		create_spell_class_table(connection, spell_class_table)
 		create_spell_fusion_table(connection)
 		create_xyz_class_table(connection, xyz_class_table)
+		create_link_class_table(connection, link_class_table)
 
 	return 0
 

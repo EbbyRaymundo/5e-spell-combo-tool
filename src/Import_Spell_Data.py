@@ -260,7 +260,7 @@ def import_default_links(csv_name: str):
 	)
 	link_table.rename_axis("link_id", inplace = True, axis = "index")
 
-	# dtype = {"rank": "int64"} not working in the read_csv()
+	# dtype = {"rating": "int64"} not working in the read_csv()
 	link_table = link_table.astype({"rating": "int64"})
 
 	# 0:8 correspond to all spellcasting class_id's
@@ -280,6 +280,7 @@ def main():
 	
 	#format_spell_csv("../spell_data/all_5e_spells.csv")
 	#import_default_xyz("../spell_data/kites_xyz_spells.csv")
+	#import_default_links("../spell_data/aleisters_link_spells.csv")
 
 
 
