@@ -4,9 +4,9 @@ import sqlite3
 
 # TODO: decide if I want to add error handling to the Accel Synchro getters to
 #		check if the input spell has a duration greater than Instantaneous.
-# TODO: change the getters to handle a list of str instead of a single input.
+# TODO: change the getters to handle a list of int spell_id's instead of a single input.
 def get_counterspelled_Accel_Synchro(source_spell: str):
-	"""
+	'''
 	Given a spell with a duration greater than instantaneous, determine the
 	eligible Reaction spells to Accel Synchro into.
 
@@ -26,7 +26,7 @@ def get_counterspelled_Accel_Synchro(source_spell: str):
 		source_spell was not found in the database.
 	ValueError
 		source_spell has multiple matches in the database.
-	"""
+	'''
 	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_name LIKE ?", [f"%{source_spell}%"])
