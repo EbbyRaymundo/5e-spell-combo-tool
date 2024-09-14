@@ -164,6 +164,24 @@ def create_spell_class_table(connection: sqlite3.Connection, spell_class_DataFra
 	spell_class_DataFrame.to_sql(name = "Spell_Class", con = connection, if_exists = "append", index = False)
 
 
+def create_spell_fusion_table(connection):
+	'''
+	Initialize the Spell_Fusion junction table with FK constraints. This
+	table will be populated later.
+	'''
+	connection.execute(
+		"""
+		CREATE TABLE Spell_Fusion(
+			spell_id INTEGER NOT NULL,
+			fusion_id INTEGER NOT NULL,
+			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
+			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id) ON DELETE CASCADE,
+			PRIMARY KEY (spell_id, fusion_id)
+		)
+		"""
+	)
+
+
 def create_xyz_class_table(connection: sqlite3.Connection, spell_class_DataFrame: pd.core.frame.DataFrame):
 	'''
 	Initialize the XYZ_Class junction table with FK constraints, then insert
@@ -214,35 +232,23 @@ def create_link_class_table(connection: sqlite3.Connection, spell_class_DataFram
 	spell_class_DataFrame.to_sql(name = "XYZ_Class", con = connection, if_exists = "append", index = False)
 
 
-def create_spell_fusion_table(connection):
-	'''
-	Initialize the Spell_Fusion junction table with FK constraints. This
-	table will be populated later.
-	'''
-	connection.execute(
-		"""
-		CREATE TABLE Spell_Fusion(
-			spell_id INTEGER NOT NULL,
-			fusion_id INTEGER NOT NULL,
-			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
-			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id) ON DELETE CASCADE,
-			PRIMARY KEY (spell_id, fusion_id)
-		)
-		"""
-	)
-
-
 def main():
 
 	with sqlite3.connect("../Gestalt.db") as connection:
 		connection.execute("PRAGMA foreign_keys = ON")
 		spell_table, class_table, spell_class_table = import_spell.format_spell_csv("../spell_data/all_5e_spells.csv")
+		xyz_table, xyz_class_table = import_spell.import_default_xyz("../spell_data/kites_xyz_spells.csv")
 
+		# main tables
 		create_spell_table(connection, spell_table)
 		create_class_table(connection, class_table)
+		create_fusion_table(connection) # use add_fusion() to add these later
+		create_xyz_table(connection, xyz_table)
+
+		# junction tables
 		create_spell_class_table(connection, spell_class_table)
-		create_fusion_table(connection)
 		create_spell_fusion_table(connection)
+		create_xyz_class_table(connection, xyz_class_table)
 
 	return 0
 

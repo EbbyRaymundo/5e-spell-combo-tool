@@ -211,11 +211,43 @@ def import_default_xyz(csv_name: str):
 	'''
 	Read a csv containing the default homebrew XYZ spells
 	'''
+	xyz_table = pd.read_csv(
+	csv_name,
+	header = 0,
+	converters = # removes any whitespace issues immediately
+		{
+			"xyz_name": str.strip,
+			"casting_time": str.strip,
+			"duration": str.strip,
+			"range": str.strip,
+			"components": str.strip,
+			"description": str.strip
+		}
+	)
+	xyz_table.rename_axis("xyz_id", inplace = True, axis = "index")
+
+	# dtype = {"rank": "int64"} not working in the read_csv()
+	xyz_table = xyz_table.astype({"rank": "int64"})
+
+	# 0:4 correspond to Wizard, Cleric, Sorcerer, Bard, Druid class_id's
+	class_availability = pd.DataFrame(data = [0, 1, 2, 3, 4], columns = ["character_class_id"]).transpose()
+	# bind a repeating number of rows equal to the row count of the xyz_table
+	class_availability = pd.concat([class_availability] * xyz_table.shape[0]).reset_index(drop = True)
+
+	# listify and expand the classes column
+	class_availability = pd.concat([xyz_table.index.to_series(), class_availability], axis = "columns")
+	class_availability = class_availability.melt(id_vars = "xyz_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer
+
+	return xyz_table, class_availability
+	
 
 
 def main():
 	
-	format_spell_csv("../spell_data/all_5e_spells.csv")
+	#format_spell_csv("../spell_data/all_5e_spells.csv")
+	#import_default_xyz("../spell_data/kites_xyz_spells.csv")
+
+
 
 	return 0
 
