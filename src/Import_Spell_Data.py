@@ -230,7 +230,7 @@ def import_default_xyz(csv_name: str):
 	xyz_table = xyz_table.astype({"rank": "int64"})
 
 	# 0:4 correspond to Wizard, Cleric, Sorcerer, Bard, Druid class_id's
-	class_availability = pd.DataFrame(data = [0, 1, 2, 3, 4], columns = ["character_class_id"]).transpose()
+	class_availability = pd.DataFrame(data = list(range(5)), columns = ["character_class_id"]).transpose()
 	# bind a repeating number of rows equal to the row count of the xyz_table
 	class_availability = pd.concat([class_availability] * xyz_table.shape[0]).reset_index(drop = True)
 
@@ -239,7 +239,41 @@ def import_default_xyz(csv_name: str):
 	class_availability = class_availability.melt(id_vars = "xyz_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer
 
 	return xyz_table, class_availability
-	
+
+
+def import_default_links(csv_name: str):
+	'''
+	Read a csv containing the default homebrew Link spells
+	'''
+	link_table = pd.read_csv(
+	csv_name,
+	header = 0,
+	converters = # removes any whitespace issues immediately
+		{
+			"link_name": str.strip,
+			"casting_time": str.strip,
+			"duration": str.strip,
+			"range": str.strip,
+			"components": str.strip,
+			"description": str.strip
+		}
+	)
+	link_table.rename_axis("link_id", inplace = True, axis = "index")
+
+	# dtype = {"rank": "int64"} not working in the read_csv()
+	link_table = link_table.astype({"rating": "int64"})
+
+	# 0:8 correspond to all spellcasting class_id's
+	class_availability = pd.DataFrame(data = list(range(9)), columns = ["character_class_id"]).transpose()
+	# bind a repeating number of rows equal to the row count of the link_table
+	class_availability = pd.concat([class_availability] * link_table.shape[0]).reset_index(drop = True)
+
+	# listify and expand the classes column
+	class_availability = pd.concat([link_table.index.to_series(), class_availability], axis = "columns")
+	class_availability = class_availability.melt(id_vars = "link_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer
+
+	return link_table, class_availability
+
 
 
 def main():
