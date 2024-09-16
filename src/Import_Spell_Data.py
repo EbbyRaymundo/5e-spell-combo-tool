@@ -142,6 +142,10 @@ def format_spell_csv(csv_name: str):
 	spell_table["concentration"] = spell_table["duration"].str.contains("Concentration")
 	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ").str.capitalize().str.strip()
 
+	# TODO: review this line
+	# Replacing "Bonus" with "Bonus Action" for casting_time
+	spell_table.replace({"casting_time": "Bonus"}, "Bonus Action", inplace = True)
+
 	# "casting_time" is already abbreviated, so we'll be consistent with abbreviations
 	spell_table["duration"] = spell_table["duration"].str.replace(pat = "minute(s)?", repl = "Min.", regex = True)
 	spell_table["duration"] = spell_table["duration"].str.replace(pat = "hour(s)?", repl = "Hr.", regex = True)

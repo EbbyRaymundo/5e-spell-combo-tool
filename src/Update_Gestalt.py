@@ -3,24 +3,60 @@ import pandas as pd
 
 
 
+def add_spell(spell: tuple[str, int, str, str, str, str, str, str, str, bool, bool], character_classes: list[int] = None):
+	'''
+	Add the standard spell into the Spell table and associate
+	the spell with every character class unless provided a list
+	to specify otherwise.
+	Tuple representing spell should be in format:
+
+	(spell_name, level, casting_time, duration, school, range, components, description, upcast_effect, concentration, ritual)
+
+	spell_name: str, in title case
+	'''
+	with sqlite3.connect("../Gestalt.db") as connection:
+		gestalt_cursor = connection.cursor()
+		gestalt_cursor.execute("PRAGMA foreign_keys = ON")
+		
+		gestalt_cursor.execute(
+			"""
+			INSERT INTO Spell(spell_name, level, casting_time, duration, school, range, components, description, upcast_effect, concentration, ritual) 
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+			""",
+			spell
+			)
+
+		new_spell_id = gestalt_cursor.lastrowid
+		spell_class_ids = associate_classes(new_spell_id, character_classes, gestalt_cursor)
+
+		gestalt_cursor.executemany("INSERT INTO Spell_Class VALUES (?, ?)", spell_class_ids)
+
+		return new_spell_id
+
+
+
+	return 0
+
+
 def add_XYZ(xyz: tuple[str, int, str, str, str, str, str], character_classes: list[int] = None):
 	'''
-	Add the XYZ spell into the Spell table and associate each XYZ
-	spell with every character class unless provided a list to specify.
+	Add the XYZ spell into the XYZ table and associate the XYZ
+	spell with every character class unless provided a list to
+	specify otherwise.
 	Tuple representing XYZ should be in format:
 
-	(<XYZ_name>, <XYZ_rank>, <casting_time>, <duration>, <range>, <components>, <description>)
+	(XYZ_name, rank, casting_time, duration, range, components, description)
 
 	xyz_name: str, in title case.
-	rank: int representing XYZ rank (1-9 typically)
-	casting_time: str representing the action economy to cast (typically "Action and Bonus Action")
+	rank: int representing XYZ rank (1-9 typically).
+	casting_time: str representing the action economy to cast (typically "Action and Bonus Action").
 	duration: str, with the time being abbreviated (Min./Hr.). Typically last 1 Hr.
 	range: str, with the distance being abbreviated (Ft./Mi.). Can also be "Line of sight".
 	components: str, typically "V, S, M (2 level <rank> spell slots and <rank> sorcery points)".
 				Can also specify "May also use a pre-existing <XYZ or spell_name> and n 
 				sorcery points" if you can overlay from an existing spell into this XYZ.
 				Example: "V, S, M (2 level 4 spell slots and 4 sorcery points. May also
-						  also use a pre-existing 'Sparks' XYZ spell and 2 sorcery points)"
+						  also use a pre-existing 'Sparks' XYZ spell and 2 sorcery points)".
 	description: str, typically in format of continuous effect, then the effect that occurs
 				 when you detach a material.
 
@@ -55,9 +91,9 @@ def add_XYZ(xyz: tuple[str, int, str, str, str, str, str], character_classes: li
 		if not character_classes:
 			character_classes = list(*range(5)) # id's: [Wizard, Cleric, Sorc, Bard, Druid]
 
-		spell_class_ids = associate_classes(new_xyz_id, character_classes, gestalt_cursor)
+		xyz_class_ids = associate_classes(new_xyz_id, character_classes, gestalt_cursor)
 
-		gestalt_cursor.executemany("INSERT INTO XYZ_Class VALUES (?, ?)", spell_class_ids)
+		gestalt_cursor.executemany("INSERT INTO XYZ_Class VALUES (?, ?)", xyz_class_ids)
 
 		return new_xyz_id
 
@@ -107,11 +143,12 @@ def add_Link(link: tuple[str, int, str, str, str, str, str], character_classes: 
 			)
 
 		new_link_id = gestalt_cursor.lastrowid
-		spell_class_ids = associate_classes(new_link_id, character_classes, gestalt_cursor)
+		link_class_ids = associate_classes(new_link_id, character_classes, gestalt_cursor)
 
-		gestalt_cursor.executemany("INSERT INTO Link_Class VALUES (?, ?)", spell_class_ids)
+		gestalt_cursor.executemany("INSERT INTO Link_Class VALUES (?, ?)", link_class_ids)
 
 		return new_link_id
+
 
 def add_Fusion(fusion: list[str, str], constituent_spells: list[int]):
 	"""
@@ -143,6 +180,7 @@ def add_Fusion(fusion: list[str, str], constituent_spells: list[int]):
 			)
 
 		return new_Fusion_id
+
 
 def associate_classes(spell_id: int, character_classes: list[int], gestalt_cursor: sqlite3.Cursor):
 	"""
