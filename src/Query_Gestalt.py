@@ -5,42 +5,36 @@ import sqlite3
 # TODO: decide if I want to add error handling to the Accel Synchro getters to
 #		check if the input spell has a duration greater than Instantaneous.
 # TODO: change the getters to handle a list of int spell_id's instead of a single input.
-def get_counterspelled_Accel_Synchro(source_spell: str):
+def get_counterspelled_Accel_Synchro(spell_id: int):
 	'''
-	Given a spell with a duration greater than instantaneous, determine the
-	eligible Reaction spells to Accel Synchro into.
+	Given the spell_id of a spell with a duration longer than "Instantaneous", 
+	determine the eligible Reaction spells to Accel Synchro into.
 
 	Parameters
 	----------
-	source_spell: str
-		Completely or partially matching unique spell name within the database.
+	spell_id: int
 
 	Returns
 	-------
 	target_spells: list[tuple]
-		List of tuples of Reaction Accel Synchro target spells.
+		List of tuples of counterspelled Accel Synchro target spells.
 
 	Raises
 	------
 	ValueError
-		source_spell was not found in the database.
-	ValueError
-		source_spell has multiple matches in the database.
+		Provided spell_id not found in Spell table
 	'''
 	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
-		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_name LIKE ?", [f"%{source_spell}%"])
 
-		check_provided_spell = gestalt_cursor.fetchall()
+		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_id == ?", spell_id)
+		source_spell = gestalt_cursor.fetchall()
 
-		# important that our query finds 1 and only 1 result
-		if not check_provided_spell:
-			raise ValueError("source_spell not found.")
+		if not source_spell:
+			raise ValueError(f"spell_id {spell_id} not found.")
 		
-		elif len(check_provided_spell) > 1:
-			raise ValueError(f"Multiple spells found with the provided spell name: {[spell[1] for spell in check_provided_spell]}.")
-
-		source_spell = check_provided_spell[0] # load spell tuple from db
+		source_spell = gestalt_cursor.fetchall()
+		source_spell = source_spell[0] # .fetchall() result is in format [(spell)]
 
 		gestalt_cursor.execute(
 			"""
@@ -57,16 +51,16 @@ def get_counterspelled_Accel_Synchro(source_spell: str):
 		return gestalt_cursor.fetchall()
 
 
-def get_reaction_Accel_Synchro(source_spell: str):
-	"""
-	Given a spell with a duration greater than instantaneous, determine the
+def get_reaction_Accel_Synchro(spell_id: int):
+	'''
+	Given a spell with a duration greater than Instantaneous, determine the
 	eligible Reaction spells to Accel Synchro into.
 
 	Parameters
 	----------
-	source_spell: str
-		Completely or partially matching unique spell name within the database.
-
+	source_spell: int
+		spell_id of the source spell.
+	
 	Returns
 	-------
 	target_spells: list[tuple]
@@ -75,24 +69,19 @@ def get_reaction_Accel_Synchro(source_spell: str):
 	Raises
 	------
 	ValueError
-		source_spell was not found in the database.
-	ValueError
-		source_spell has multiple matches in the database.
-	"""
+		Provided spell_id not found in Spell table
+	'''
 	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
-		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_name LIKE ?", [f"%{source_spell}%"])
 
-		check_provided_spell = gestalt_cursor.fetchall()
+		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_id == ?", spell_id)
+		source_spell = gestalt_cursor.fetchall()
 
-		# important that our query finds 1 and only 1 result
-		if not check_provided_spell:
-			raise ValueError("source_spell not found.")
+		if not source_spell:
+			raise ValueError(f"spell_id {spell_id} not found.")
 		
-		elif len(check_provided_spell) > 1:
-			raise ValueError(f"Multiple spells found with the provided spell name: {[spell[1] for spell in check_provided_spell]}.")
-
-		source_spell = check_provided_spell[0] # load spell tuple from db
+		source_spell = gestalt_cursor.fetchall()
+		source_spell = source_spell[0] # .fetchall() result is in format [(spell)]
 
 		gestalt_cursor.execute(
 			"""
@@ -109,16 +98,15 @@ def get_reaction_Accel_Synchro(source_spell: str):
 		return gestalt_cursor.fetchall()
 
 
-def get_main_action_Accel_Synchro():
-	"""
-	Given a spell with a duration greater than instantaneous, determine the
-	eligible Reaction spells to Accel Synchro into.
+def get_main_action_Accel_Synchro(spell_id: int):
+	'''
+	Given the spell_id of a spell with a duration greater than Instantaneous,
+	determine the eligible spells to Accel Synchro into.
 
 	Parameters
 	----------
-	source_spell: str
-		Completely or partially matching unique spell name within the database.
-
+	spell_id: int
+	
 	Returns
 	-------
 	target_spells: list[tuple]
@@ -127,24 +115,18 @@ def get_main_action_Accel_Synchro():
 	Raises
 	------
 	ValueError
-		source_spell was not found in the database.
-	ValueError
-		source_spell has multiple matches in the database.
-	"""
+		Provided spell_id not found in Spell table
+	'''
 	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
-		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_name LIKE ?", [f"%{source_spell}%"])
 
-		check_provided_spell = gestalt_cursor.fetchall()
+		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_id == ?", spell_id)
+		source_spell = gestalt_cursor.fetchall()
 
-		# important that our query finds 1 and only 1 result
-		if not check_provided_spell:
-			raise ValueError("source_spell not found.")
-		
-		elif len(check_provided_spell) > 1:
-			raise ValueError(f"Multiple spells found with the provided spell name: {[spell[1] for spell in check_provided_spell]}.")
+		if not source_spell:
+			raise ValueError(f"spell_id {spell_id} not found.")
 
-		source_spell = check_provided_spell[0] # load spell tuple from db
+		source_spell = source_spell[0] # .fetchall() result is in format [(spell)]
 
 		gestalt_cursor.execute(
 			"""
@@ -161,9 +143,9 @@ def get_main_action_Accel_Synchro():
 
 
 def find_Fusion_target():
-	"""
+	'''
 	Given a spell, return any available Fusion spell targets.
-	"""
+	'''
 
 	return
 
