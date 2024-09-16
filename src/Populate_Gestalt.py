@@ -68,14 +68,17 @@ def create_class_table(connection, class_DataFrame: pd.core.frame.DataFrame):
 def create_fusion_table(connection):
 	'''
 	Initialize the Fusion table with the PK constraint. This table will be
-	populated later.
+	populated later with add_Fusion() in Update_Gestalt.py.
 	'''
 	connection.execute(
 		"""
 		CREATE TABLE Fusion(
 			fusion_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			fusion_name TEXT UNIQUE NOT NULL,
-			description TEXT UNIQUE NOT NULL
+			duration TEXT NOT NULL,
+			range TEXT NOT NULL,
+			description TEXT UNIQUE NOT NULL,
+			concentration INTEGER CHECK (concentration IN (0, 1)) NOT NULL,
 		)
 		"""
 	)
