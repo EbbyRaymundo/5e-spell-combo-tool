@@ -142,22 +142,66 @@ def get_main_action_Accel_Synchro(spell_id: int):
 		return gestalt_cursor.fetchall()
 
 
-def find_Fusion_target():
+def find_Fusion_targets(spell_id: int):
 	'''
-	Given a spell, return any available Fusion spell targets.
+	Given a spell, return any available Fusion spell targets and their
+	constituent spells.
 	'''
+	with sqlite3.connect("../Gestalt.db") as connection:
+		gestalt_cursor = connection.cursor()
+
+		spell_id = int(spell_id)
+
+		# forced to use string interpolation here since parameters aren't
+		# allowed in VIEW statements
+		gestalt_cursor.execute(
+			f"""
+			CREATE TEMPORARY VIEW target_fusions
+			AS
+			SELECT fusion_id 
+			FROM Spell_Fusion
+			WHERE spell_id == {spell_id}
+			"""
+		)
+
+		gestalt_cursor.execute(
+			"""
+			SELECT Fusion.*
+			FROM Fusion
+			INNER JOIN target_fusions ON Fusion.fusion_id = target_fusions.fusion_id
+			"""
+		)
+
+		target_fusions = gestalt_cursor.fetchall() # fusions filtered by input spell_id
+
+		if not target_fusions:
+			raise ValueError(f"spell_id {spell_id} not found as a Fusion component.")
+
+		# filter Fusions using our view, then join with Spell table to get all
+		# Fusion materials possible for the target Fusions.
+		gestalt_cursor.execute(
+			"""
+			SELECT Spell.*
+			FROM Fusion
+			INNER JOIN target_fusions ON Fusion.fusion_id = target_fusions.fusion_id
+			INNER JOIN Spell_Fusion ON Fusion.fusion_id = Spell_Fusion.fusion_id
+			INNER JOIN Spell ON Spell_Fusion.spell_id = Spell.spell_id
+			"""
+		)
+
+		target_materials = gestalt_cursor.fetchall()
+
+		return target_fusions, target_materials
 
 	return
 
 
 def main():
 
-	# test if error handling properly works for non-specific spell queries
-	#find_Accel_Synchro_target("ray", "doyle")
+	fireball_Fusions, fireball_Fusion_materials = find_Fusion_targets(477)
 
-	# test if error handling properly works for nonexistent query
-	#for spell in find_Accel_Synchro_target("death ward", 2):
-	#	print(spell)
+	print(fireball_Fusions)
+	print(fireball_Fusion_materials)
 
 	return 0
 
