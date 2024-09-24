@@ -173,6 +173,7 @@ def find_Fusion_targets(spell_id: int):
    				FROM Spell_Fusion
    				WHERE spell_id == 181
    			)
+			AND Spell.spell_id != 181
 
 		'''
 
