@@ -152,6 +152,30 @@ def find_Fusion_targets(spell_id: int):
 
 		spell_id = int(spell_id)
 
+		'''
+		TODO: use a subquery so that we can subset which fusion_id's
+			  in Spell_Fusion have the input spell_id in their spell_id, fusion_id
+			  pair, then use the result to see all the OTHER spells required in the
+			  candidate Fusions.
+
+			Using Fireball (spell_id == 181) as a test. To give the fusion_id:
+
+			SELECT fusion_id
+    		FROM Spell_Fusion
+    		WHERE spell_id == 181
+
+			Current draft that works in sqlite:
+			SELECT * FROM Fusion
+			JOIN Spell_Fusion ON Fusion.fusion_id = Spell_Fusion.fusion_id
+			JOIN Spell ON Spell_Fusion.spell_id = Spell.spell_id
+			WHERE Fusion.fusion_id IN (
+   				SELECT fusion_id
+   				FROM Spell_Fusion
+   				WHERE spell_id == 181
+   			)
+
+		'''
+
 		# forced to use string interpolation here since parameters aren't
 		# allowed in VIEW statements
 		gestalt_cursor.execute(
