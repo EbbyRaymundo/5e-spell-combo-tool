@@ -142,59 +142,36 @@ def get_main_action_Accel_Synchro(spell_id: int):
 		return gestalt_cursor.fetchall()
 
 
-def find_Fusion_targets(spell_id: int):
+def get_Fusion_targets(spell_id: int):
 	'''
-	Given a spell, return any available Fusion spell targets and their
-	constituent spells.
+	Given a spell_id, return any available Fusion spell targets and their
+	spell components, EXCEPT for the input spell.
+
+	Parameters
+	----------
+	spell_id: int
+
+	Returns
+	-------
+	target_fusions: list[tuple]
+		List of query results with tuples in format (Fusion.*, Spell.*)
 	'''
 	with sqlite3.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 
-		spell_id = int(spell_id)
-
-		'''
-		TODO: use a subquery so that we can subset which fusion_id's
-			  in Spell_Fusion have the input spell_id in their spell_id, fusion_id
-			  pair, then use the result to see all the OTHER spells required in the
-			  candidate Fusions.
-
-			Using Fireball (spell_id == 181) as a test. To give the fusion_id:
-
-			SELECT fusion_id
-    		FROM Spell_Fusion
-    		WHERE spell_id == 181
-
-			Current draft that works in sqlite:
+		gestalt_cursor.execute(
+			"""
 			SELECT * FROM Fusion
 			JOIN Spell_Fusion ON Fusion.fusion_id = Spell_Fusion.fusion_id
 			JOIN Spell ON Spell_Fusion.spell_id = Spell.spell_id
 			WHERE Fusion.fusion_id IN (
    				SELECT fusion_id
    				FROM Spell_Fusion
-   				WHERE spell_id == 181
+   				WHERE spell_id == ?
    			)
-			AND Spell.spell_id != 181
-
-		'''
-
-		# forced to use string interpolation here since parameters aren't
-		# allowed in VIEW statements
-		gestalt_cursor.execute(
-			f"""
-			CREATE TEMPORARY VIEW target_fusions
-			AS
-			SELECT fusion_id 
-			FROM Spell_Fusion
-			WHERE spell_id == {spell_id}
-			"""
-		)
-
-		gestalt_cursor.execute(
-			"""
-			SELECT Fusion.*
-			FROM Fusion
-			INNER JOIN target_fusions ON Fusion.fusion_id = target_fusions.fusion_id
-			"""
+			AND Spell.spell_id != ?
+			""",
+			[spell_id, spell_id]
 		)
 
 		target_fusions = gestalt_cursor.fetchall() # fusions filtered by input spell_id
@@ -202,31 +179,16 @@ def find_Fusion_targets(spell_id: int):
 		if not target_fusions:
 			raise ValueError(f"spell_id {spell_id} not found as a Fusion component.")
 
-		# filter Fusions using our view, then join with Spell table to get all
-		# Fusion materials possible for the target Fusions.
-		gestalt_cursor.execute(
-			"""
-			SELECT Spell.*
-			FROM Fusion
-			INNER JOIN target_fusions ON Fusion.fusion_id = target_fusions.fusion_id
-			INNER JOIN Spell_Fusion ON Fusion.fusion_id = Spell_Fusion.fusion_id
-			INNER JOIN Spell ON Spell_Fusion.spell_id = Spell.spell_id
-			"""
-		)
-
-		target_materials = gestalt_cursor.fetchall()
-
-		return target_fusions, target_materials
+		return target_fusions
 
 	return
 
 
 def main():
 
-	fireball_Fusions, fireball_Fusion_materials = find_Fusion_targets(477)
+	fireball_Fusions = get_Fusion_targets(181)
 
 	print(fireball_Fusions)
-	print(fireball_Fusion_materials)
 
 	return 0
 
