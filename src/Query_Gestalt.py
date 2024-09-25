@@ -174,7 +174,9 @@ def get_Fusion_targets(spell_id: int):
 			[spell_id, spell_id]
 		)
 
-		target_fusions = gestalt_cursor.fetchall() # fusions filtered by input spell_id
+		# tuples containing fusions using input spell_id as components
+		# and the OTHER spells required as their components
+		target_fusions = gestalt_cursor.fetchall()
 
 		if not target_fusions:
 			raise ValueError(f"spell_id {spell_id} not found as a Fusion component.")
