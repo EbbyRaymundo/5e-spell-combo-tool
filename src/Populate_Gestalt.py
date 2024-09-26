@@ -184,6 +184,9 @@ def create_spell_fusion_table(connection):
 		"""
 	)
 
+	# this index will optimize the get_Fusion_targets() function in Query_Gestalt.py
+	connection.execute("CREATE INDEX Spell_Fusion_fusion_id_idx on Spell_Fusion(fusion_id)")
+
 
 def create_xyz_class_table(connection: sqlite3.Connection, spell_class_DataFrame: pd.core.frame.DataFrame):
 	'''
