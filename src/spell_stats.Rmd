@@ -1,0 +1,80 @@
+---
+title: "5e spell stats"
+author: "Eberardo B. Raymundo"
+date: "2024-09-25"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r libraries, message = FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+
+```{r connection}
+connection <- DBI::dbConnect(RSQLite::SQLite(), dbname = "../Gestalt.db")
+```
+
+
+```{r spell data retrieval, message = FALSE}
+spell_table <- tbl(connection, "Spell")
+
+spell_data <- spell_table %>% collect()
+
+spell_data <- spell_data %>%
+  mutate(concentration = as.logical(concentration)) %>%
+  mutate(ritual = as.logical(ritual))
+```
+
+
+```{r school distribution}
+spell_data %>%
+  ggplot() +
+    geom_bar(aes(school, fill = school), show.legend = FALSE) +
+    theme_classic()
+
+```
+
+
+```{r level distribution}
+spell_data %>%
+  group_by(level) %>%
+  summarize(n = n()) %>%
+    ggplot() +
+      geom_line(aes(level, n), linewidth = 1) +
+      labs(
+        title = "Number of Spells per Level"
+      ) +
+      scale_x_continuous(breaks = seq(0, 9)) +
+      xlab("Spell Level") +
+      ylab("Spell Count") +
+      theme_classic()
+```
+
+```{r level school distribution}
+spell_data %>%
+  ggplot() +
+  geom_bar(aes(level, fill = school)) +
+  scale_fill_viridis_d() +
+  theme_classic()
+```
+
+
+```{r level school areas}
+spell_data %>%
+  group_by(level, school) %>%
+  summarize(count = n()) %>%
+  ggplot() +
+  geom_area(aes(level, count, fill = school), alpha = 0.8, colour = "black", size = 0.25) +
+  scale_x_continuous(breaks = seq(0, 9)) +
+  scale_fill_viridis_d() +
+  theme_classic()
+
+ggsave("../images/schools_by_level.png", width = 8, height = 4)
+```
+
