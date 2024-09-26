@@ -41,6 +41,14 @@ def create_spell_table(connection, spell_DataFrame: pd.core.frame.DataFrame):
 	
 	spell_DataFrame.to_sql(name = "Spell", con = connection, if_exists = "append", index = True)
 
+	# this index will optimize the Accel Synchro queries in Query_Gestalt.py
+	connection.execute(
+		"""
+		CREATE INDEX Spell_school_casting_time_level_idx
+		ON Spell(school, casting_time, level)
+		"""
+		)
+
 
 def create_class_table(connection, class_DataFrame: pd.core.frame.DataFrame):
 	'''
@@ -185,7 +193,12 @@ def create_spell_fusion_table(connection):
 	)
 
 	# this index will optimize the get_Fusion_targets() function in Query_Gestalt.py
-	connection.execute("CREATE INDEX Spell_Fusion_fusion_id_idx on Spell_Fusion(fusion_id)")
+	connection.execute(
+		"""
+		CREATE INDEX Spell_Fusion_fusion_id_idx 
+		ON Spell_Fusion(fusion_id)
+		"""
+		)
 
 
 def create_xyz_class_table(connection: sqlite3.Connection, spell_class_DataFrame: pd.core.frame.DataFrame):
