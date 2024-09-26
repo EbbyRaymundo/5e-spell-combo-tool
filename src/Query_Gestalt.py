@@ -1,7 +1,13 @@
 import sqlite3
 
 
-
+"""
+Notes to self:
+- .timer on to time db operations
+- .expert on for index suggestions
+- Prefix query with EXPLAIN QUERY PLAN to check if any queries
+  have to scan across a table.
+"""
 # TODO: decide if I want to add error handling to the Accel Synchro getters to
 #		check if the input spell has a duration greater than Instantaneous.
 # TODO: change the getters to handle a list of int spell_id's instead of a single input.
