@@ -36,45 +36,96 @@ spell_data <- spell_data %>%
 spell_data %>%
   ggplot() +
     geom_bar(aes(school, fill = school), show.legend = FALSE) +
+    scale_fill_viridis_d() +
+    labs(title = "Number of Spells per School") +
+    xlab("Spell School") +
+    ylab("Spell Count") +
     theme_classic()
 
+ggsave("../images/spells_by_school.png", width = 7, height = 4)
 ```
 
 
-```{r level distribution}
-spell_data %>%
-  group_by(level) %>%
-  summarize(n = n()) %>%
-    ggplot() +
-      geom_line(aes(level, n), linewidth = 1) +
-      labs(
-        title = "Number of Spells per Level"
-      ) +
-      scale_x_continuous(breaks = seq(0, 9)) +
-      xlab("Spell Level") +
-      ylab("Spell Count") +
-      theme_classic()
-```
-
-```{r level school distribution}
-spell_data %>%
-  ggplot() +
-  geom_bar(aes(level, fill = school)) +
-  scale_fill_viridis_d() +
-  theme_classic()
-```
-
-
-```{r level school areas}
+```{r level school areas, message = FALSE}
 spell_data %>%
   group_by(level, school) %>%
   summarize(count = n()) %>%
   ggplot() +
-  geom_area(aes(level, count, fill = school), alpha = 0.8, colour = "black", size = 0.25) +
-  scale_x_continuous(breaks = seq(0, 9)) +
-  scale_fill_viridis_d() +
-  theme_classic()
+    geom_area(aes(level, count, fill = school), alpha = 0.8, colour = "black", size = 0.25) +
+    scale_x_continuous(breaks = seq(0, 9)) +
+    scale_fill_viridis_d() +
+    labs(title = "Number of Spells per Level") +
+    xlab("Spell Level") +
+    ylab("Spell Count") +
+    theme_classic()
 
 ggsave("../images/schools_by_level.png", width = 8, height = 4)
+```
+
+
+```{r}
+spell_data %>%
+  group_by(casting_time) %>%
+  summarize(count = n()) %>%
+  ggplot() +
+    geom_col(aes(casting_time, count), 
+             alpha = 0.6, 
+             fill = "red", 
+             colour = "black", 
+             linewidth = 0.1) +
+    geom_text(aes(casting_time, count, label = count), vjust = -0.5, size = 3) +
+    labs(title = "Number of Spells per Casting Time") +
+    xlab("Casting Time") +
+    ylab("Spell Count") +
+    theme_classic()
+
+ggsave("../images/spells_by_casting_time.png", width = 7, height = 4)
+```
+
+
+```{r}
+spell_data %>%
+  mutate(trimmed_duration = sub("^Up to ", "", duration)) %>%
+  group_by(trimmed_duration) %>%
+  ggplot() +
+    geom_bar(aes(trimmed_duration, fill = concentration)) +
+    coord_flip() +
+    labs(title = "Number of Spells per Duration") +
+    xlab("Spell Duration") +
+    ylab("Spell Count") +
+    theme_classic()
+```
+
+
+```{r}
+spell_data %>%
+  mutate(description_word_count = sapply(strsplit(description, " "), length)) %>%
+  ggplot() +
+    geom_point(aes(level, description_word_count), position = position_jitter(width = 0.2, height = 0)) +
+    scale_x_continuous(breaks = seq(0, 9)) +
+    labs(title = "Spell Word Count per Spell Level") +
+    xlab("Spell Level") +
+    ylab("Word Count") +
+    theme_classic()
+```
+
+
+```{r}
+spell_data %>%
+  mutate(description_word_count = sapply(strsplit(description, " "), length)) %>%
+  group_by(level) %>%
+  arrange(desc(description_word_count), .by_group = TRUE) %>%
+  slice_head(n = 3) %>%
+  select(spell_name, level, description_word_count)
+```
+
+
+```{r}
+spell_data %>%
+  mutate(description_word_count = sapply(strsplit(description, " "), length)) %>%
+  group_by(level) %>%
+  arrange(description_word_count, .by_group = TRUE) %>%
+  slice_head(n = 3) %>%
+  select(spell_name, level, description_word_count)
 ```
 
