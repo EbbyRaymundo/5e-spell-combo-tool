@@ -273,10 +273,15 @@ def format_spell_csv_pl(csv_name: str):
 			),
 			pl.col("casting_time").str.strip_chars().str.replace_all(
 				pattern = "Bonus", 
-				value = "Bonus Action"),
+				value = "Bonus Action",
+				literal = True 
+			),
 			pl.col("duration").str.strip_chars().str.strip_prefix("Concentration, ").str.replace_all(
 				pattern = "minute(s)?",
 				value = "Min."
+			).str.replace_all(
+				pattern = "hour(s)?",
+				value = "Hr."
 			)
 		)
 	)
