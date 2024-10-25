@@ -252,10 +252,8 @@ def format_spell_csv_pl(csv_name: str):
 				]
 		)
 		.with_columns(
-			concentration = pl.col("duration").str.contains("Concentration"),
-			ritual = pl.col("school").str.contains("ritual")
-		)
-		.select(
+			pl.col("duration").str.contains("Concentration").alias("concentration"),
+			pl.col("school").str.contains("ritual").alias("ritual"),
 			pl.col("spell_name").str.strip_chars(),
 			pl.col("level").str.strip_chars().str.replace_many(
 				{
