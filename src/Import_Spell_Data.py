@@ -237,8 +237,7 @@ def format_spell_csv_pl(csv_name: str):
 			source = csv_name,
 			has_header = True,
 			null_values = "",
-			new_columns = 
-				[
+			new_columns = [
 					"spell_name",
 					"level",
 					"casting_time",
@@ -257,8 +256,7 @@ def format_spell_csv_pl(csv_name: str):
 	spell_table = master_table.select(
 			
 			pl.col("spell_name").str.strip_chars(),
-			pl.col("level").str.strip_chars().str.replace_many(
-				{
+			pl.col("level").str.strip_chars().str.replace_many({
 					"Cantrip": '0',
 					"1st": '1',
 					"2nd": '2',
@@ -305,36 +303,67 @@ def format_spell_csv_pl(csv_name: str):
 	# evaluate, add spell_id column, then return to lazy mode
 	spell_table = spell_table.collect().with_row_index("spell_id").lazy()
 
-	dnd_classes = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"]
+	dnd_classes = [
+		"Wizard", "Cleric", "Sorcerer", 
+		"Bard", "Druid", "Artificer", 
+		"Paladin", "Warlock", "Ranger"
+		]
+	
 	dnd_classes = pl.LazyFrame(
-		data =
-		{
+		data = {
 			"character_class_id": range(len(dnd_classes)),
 			"character_class": dnd_classes
 		},
-		schema =
-		{
+		schema = {
 			"character_class_id": pl.UInt64,
 			"character_class": pl.String
 		}
 	)
-
-	# select standard and optional availability from master_table,
-	# trim, listify, then set union those lists
 	
-
-	# concat spell_id with unioned classes column wise,
-	# pivot longer, then drop nulls
+	# concat spell_id with listified character_classes,
+	# then do the same with spell_id and listified optional_classes,
+	# then merge these two dataframes together
 	class_availability = (
 		pl.concat(
 			[
 				spell_table.select(pl.col("spell_id")),
 				master_table.select(pl.col("character_classes").str.strip_chars().str.split(by = ", "))
 			],
+			how = "horizontal"
+		)
+		.explode("character_classes")
+		.drop_nulls()
+		# the spell_id sorting is preserved from the demolition process so this
+		# will produce defined behavior
+		.merge_sorted(
+			# repeating same process as above
+			pl.concat(
+				[
+					spell_table.select(pl.col("spell_id")),
+					master_table.select(pl.col("optional_classes").str.strip_chars().str.split(by = ", ").alias("character_classes"))
+	 			],
+				how = "horizontal"
+			)
+			.explode("character_classes")
+			.drop_nulls(),
+			key = "spell_id"
+		)
+		.unique()
+	)
+
+	'''
+	optional_availability = (pl.concat(
+		[
+			spell_table.select(pl.col("spell_id")),
+			master_table.select(pl.col("optional_classes").str.strip_chars().str.split(by = ", ").alias("character_classes"))
+	 	],
 		how = "horizontal"
+		)
+		.explode("optional_classes")
+		.drop_nulls()
 	)
-	.explode("character_classes")
-	)
+	'''
+	#class_availability = class_availability.merge_sorted(optional_availability, key = "spell_id")
 	'''
 	class_availability = pl.concat(
 		[
@@ -474,7 +503,7 @@ def main():
 	#import_default_links("../spell_data/aleisters_link_spells.csv")
 	polar_spells, polars_classes = format_spell_csv_pl("../spell_data/all_5e_spells.csv")
 	#print(polar_spells.head(10))
-	#print(polars_classes.head(20))
+	print(polars_classes.height)
 
 	return 0
 
