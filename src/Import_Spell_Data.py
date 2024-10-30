@@ -268,7 +268,8 @@ def format_spell_csv_pl(csv_name: str):
 					"8th": '8',
 					"9th": '9'
 				}
-			),
+			)
+			.cast(pl.UInt32),
 			pl.col("casting_time").str.strip_chars().str.replace_all(
 				pattern = "Bonus", 
 				value = "Bonus Action",
@@ -301,23 +302,23 @@ def format_spell_csv_pl(csv_name: str):
 		)
 
 	# evaluate, add spell_id column, then return to lazy mode
-	spell_table = spell_table.collect().with_row_index("spell_id").lazy()
+	spell_table = spell_table.with_row_index("spell_id")
 
-	dnd_classes = [
-		"Wizard", "Cleric", "Sorcerer", 
-		"Bard", "Druid", "Artificer", 
-		"Paladin", "Warlock", "Ranger"
-		]
 	
-	dnd_classes = pl.LazyFrame(
-		data = {
-			"character_class_id": range(len(dnd_classes)),
-			"character_class": dnd_classes
-		},
-		schema = {
-			"character_class_id": pl.UInt64,
-			"character_class": pl.String
-		}
+	dnd_classes = (
+		pl.LazyFrame(
+			data = {
+				"character_class": [
+					"Wizard", "Cleric", "Sorcerer", 
+					"Bard", "Druid", "Artificer", 
+					"Paladin", "Warlock", "Ranger"
+				]
+			},
+			schema = {
+				"character_class": pl.String
+			}
+		)
+		.with_row_index("character_class_id")
 	)
 	
 	# concat spell_id with listified character_classes,
@@ -349,82 +350,27 @@ def format_spell_csv_pl(csv_name: str):
 			key = "spell_id"
 		)
 		.unique()
-	)
-
-	'''
-	optional_availability = (pl.concat(
-		[
-			spell_table.select(pl.col("spell_id")),
-			master_table.select(pl.col("optional_classes").str.strip_chars().str.split(by = ", ").alias("character_classes"))
-	 	],
-		how = "horizontal"
-		)
-		.explode("optional_classes")
-		.drop_nulls()
-	)
-	'''
-	#class_availability = class_availability.merge_sorted(optional_availability, key = "spell_id")
-	'''
-	class_availability = pl.concat(
-		[
-			spell_table.select(pl.col("spell_id")), 
-   			master_table.select(
-				# strip, listify, then union both columns
-				pl.col("character_classes").str.strip_chars().str.split(by = ", ")
-				.list.set_union(pl.col("optional_classes").str.strip_chars().str.split(by = ", "))
-				.alias("character_class")
-			)
-		],
-		how = "horizontal"
-	)
-	'''
-	'''
-	# listify, expand, and merge the class_availability with its corresponding spell_id
-
-	# listify and expand the classes column
-	class_availability = pd.concat([spell_table.index.to_series(), class_availability], axis = "columns")
-	class_availability = class_availability.melt(id_vars = "spell_id", value_name = "character_class").drop("variable", axis = "columns") # pivot longer
-	class_availability.dropna(inplace = True)
-
-	# repeat for the optional_availability column
-	optional_availability = spell_table["optional_classes"].str.split(", ", expand = True) # listify and expand
-	optional_availability = pd.concat([spell_table.index.to_series(), optional_availability], axis = "columns")
-	optional_availability = optional_availability.melt(id_vars = "spell_id", value_name = "character_class").drop("variable", axis = "columns") # pivot longer
-	optional_availability.dropna(inplace = True)
-
-	all_availability = pd.merge(class_availability, optional_availability, how = "outer")
-
-	all_availability.replace(to_replace = "", value = pd.NA, inplace = True)
-	all_availability.dropna(inplace = True)
-
-	# this replaces with the corresponding character_class_id in
-	# the dnd_classes dataframe
-	all_availability = all_availability.replace(
-		{"character_class": {
-			"Wizard": '0',
-			"Cleric": '1',
-			"Sorcerer": '2',
-			"Bard": '3',
-			"Druid": '4',
-			"Artificer": '5',
-			"Paladin": '6',
-			"Warlock": '7',
-			"Ranger": '8'
+		.select(
+			pl.col("spell_id"),
+			pl.col("character_classes").str.replace_many({
+				"Wizard": '0',
+				"Cleric": '1',
+				"Sorcerer": '2',
+				"Bard": '3',
+				"Druid": '4',
+				"Artificer": '5',
+				"Paladin": '6',
+				"Warlock": '7',
+				"Ranger": '8'
 			}
-   		}
-	).astype({"character_class": "int64"}, copy = False)
+			)
+			.cast(pl.UInt32)
+			.alias("character_class_id")
+		)
+	)
 
-	all_availability.reset_index(drop = True, inplace = True) # index is spotty from the dropna()
-	# need to appropriately rename the column after remapping
-	all_availability.rename(columns = {"character_class": "character_class_id"}, inplace = True)
-	
-	spell_table.drop(columns = ["character_class", "optional_classes"], inplace = True) # new tables made, no longer needed
-	# empty upcast values were never filled with NAs by pandas in read_csv for some reason
-	spell_table.replace(to_replace = "", value = pd.NA, inplace = True)
 
-	'''
-
-	return spell_table.collect(), class_availability.collect()
+	return spell_table.collect(), dnd_classes.collect(), class_availability.collect()
 
 
 def import_default_xyz(csv_name: str):
@@ -501,9 +447,10 @@ def main():
 	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
 	#import_default_xyz("../spell_data/kites_xyz_spells.csv")
 	#import_default_links("../spell_data/aleisters_link_spells.csv")
-	polar_spells, polars_classes = format_spell_csv_pl("../spell_data/all_5e_spells.csv")
+	polar_spells, polars_classes, polars_availability = format_spell_csv_pl("../spell_data/all_5e_spells.csv")
 	#print(polar_spells.head(10))
-	print(polars_classes.height)
+	#sprint(polars_classes.height)
+	print(polars_classes)
 
 	return 0
 
