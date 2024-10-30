@@ -253,58 +253,67 @@ def format_spell_csv_pl(csv_name: str):
 		)
 	)
 
-	spell_table = master_table.select(
+	spell_table = (master_table.select(
 			
-			pl.col("spell_name").str.strip_chars(),
-			pl.col("level").str.strip_chars().str.replace_many({
-					"Cantrip": '0',
-					"1st": '1',
-					"2nd": '2',
-					"3rd": '3',
-					"4th": '4',
-					"5th": '5',
-					"6th": '6',
-					"7th": '7',
-					"8th": '8',
-					"9th": '9'
-				}
-			)
-			.cast(pl.UInt32),
-			pl.col("casting_time").str.strip_chars().str.replace_all(
-				pattern = "Bonus", 
-				value = "Bonus Action",
-				literal = True 
-			),
-			pl.col("duration").str.strip_chars().str.strip_prefix("Concentration, ")
-			.str.replace_all(
-				pattern = "minute(s)?",
-				value = "Min."
-			)
-			.str.replace_all(
-				pattern = "hour(s)?",
-				value = "Hr."
-			)
-			.map_elements(lambda duration: duration.capitalize(), return_dtype = pl.String),
-			pl.col("school").str.strip_chars().str.strip_suffix(" (ritual)"),
-			pl.col("range").str.strip_chars().str.replace_all(
-				pattern = "feet|foot",
-				value = "Ft."
-			)
-			.str.replace_all(
-				pattern = "mile(s)?",
-				value = "Mi."
-			),
-			pl.col("components").str.strip_chars(),
-			pl.col("description").str.strip_chars(),
-			pl.col("upcast_effect").str.strip_chars().str.strip_prefix("At Higher Levels. "),
-			pl.col("duration").str.contains("Concentration").alias("concentration"),
-			pl.col("school").str.contains("ritual").alias("ritual")
+		pl.col("spell_name").str.strip_chars(),
+
+		pl.col("level").str.strip_chars().str.replace_many({
+			"Cantrip": '0',
+			"1st": '1',
+			"2nd": '2',
+			"3rd": '3',
+			"4th": '4',
+			"5th": '5',
+			"6th": '6',
+			"7th": '7',
+			"8th": '8',
+			"9th": '9'
+			}
 		)
+		.cast(pl.UInt32),
 
-	# evaluate, add spell_id column, then return to lazy mode
-	spell_table = spell_table.with_row_index("spell_id")
+		pl.col("casting_time").str.strip_chars().str.replace_all(
+			pattern = "Bonus", 
+			value = "Bonus Action",
+			literal = True 
+		),
 
+		pl.col("duration").str.strip_chars().str.strip_prefix("Concentration, ")
+		.str.replace_all(
+			pattern = "minute(s)?",
+			value = "Min."
+		)
+		.str.replace_all(
+			pattern = "hour(s)?",
+			value = "Hr."
+		)
+		.map_elements(lambda duration: duration.capitalize(), return_dtype = pl.String),
+
+		pl.col("school").str.strip_chars().str.strip_suffix(" (ritual)"),
+
+		pl.col("range").str.strip_chars().str.replace_all(
+			pattern = "feet|foot",
+			value = "Ft."
+		)
+		.str.replace_all(
+			pattern = "mile(s)?",
+			value = "Mi."
+		),
+
+		pl.col("components").str.strip_chars(),
+
+		pl.col("description").str.strip_chars(),
+
+		pl.col("upcast_effect").str.strip_chars().str.strip_prefix("At Higher Levels. "),
+
+		pl.col("duration").str.contains("Concentration").alias("concentration"),
+
+		pl.col("school").str.contains("ritual").alias("ritual")
+		)
+		.with_row_index("spell_id")
+	)
 	
+	# create table for character_class and corresponding character_class_id
 	dnd_classes = (
 		pl.LazyFrame(
 			data = {
@@ -314,9 +323,7 @@ def format_spell_csv_pl(csv_name: str):
 					"Paladin", "Warlock", "Ranger"
 				]
 			},
-			schema = {
-				"character_class": pl.String
-			}
+			schema = {"character_class": pl.String}
 		)
 		.with_row_index("character_class_id")
 	)
@@ -325,10 +332,12 @@ def format_spell_csv_pl(csv_name: str):
 	# then do the same with spell_id and listified optional_classes,
 	# then merge these two dataframes together
 	class_availability = (
-		pl.concat(
-			[
+		pl.concat([
 				spell_table.select(pl.col("spell_id")),
-				master_table.select(pl.col("character_classes").str.strip_chars().str.split(by = ", "))
+				master_table.select(
+					pl.col("character_classes")
+					.str.strip_chars()
+					.str.split(by = ", "))
 			],
 			how = "horizontal"
 		)
@@ -338,10 +347,13 @@ def format_spell_csv_pl(csv_name: str):
 		# will produce defined behavior
 		.merge_sorted(
 			# repeating same process as above
-			pl.concat(
-				[
+			pl.concat([
 					spell_table.select(pl.col("spell_id")),
-					master_table.select(pl.col("optional_classes").str.strip_chars().str.split(by = ", ").alias("character_classes"))
+					master_table.select(
+						pl.col("optional_classes")
+						.str.strip_chars()
+						.str.split(by = ", ")
+						.alias("character_classes"))
 	 			],
 				how = "horizontal"
 			)
@@ -349,7 +361,7 @@ def format_spell_csv_pl(csv_name: str):
 			.drop_nulls(),
 			key = "spell_id"
 		)
-		.unique()
+		.unique() # drop dupes from merged result
 		.select(
 			pl.col("spell_id"),
 			pl.col("character_classes").str.replace_many({
@@ -362,7 +374,7 @@ def format_spell_csv_pl(csv_name: str):
 				"Paladin": '6',
 				"Warlock": '7',
 				"Ranger": '8'
-			}
+				}
 			)
 			.cast(pl.UInt32)
 			.alias("character_class_id")
@@ -450,7 +462,7 @@ def main():
 	polar_spells, polars_classes, polars_availability = format_spell_csv_pl("../spell_data/all_5e_spells.csv")
 	#print(polar_spells.head(10))
 	#sprint(polars_classes.height)
-	print(polars_classes)
+	#print(polars_classes)
 
 	return 0
 
