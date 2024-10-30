@@ -232,10 +232,11 @@ def format_spell_csv_pl(csv_name: str):
 	- Create a junction table between the spells and classes
 	'''
 
-	spell_table = (
+	master_table = (
 		pl.scan_csv(
 			source = csv_name,
 			has_header = True,
+			null_values = "",
 			new_columns = 
 				[
 					"spell_name",
@@ -245,15 +246,16 @@ def format_spell_csv_pl(csv_name: str):
 					"school",
 					"range",
 					"components",
-					"character_class",
+					"character_classes",
 					"optional_classes",
 					"description",
 					"upcast_effect"
 				]
 		)
-		.with_columns(
-			pl.col("duration").str.contains("Concentration").alias("concentration"),
-			pl.col("school").str.contains("ritual").alias("ritual"),
+	)
+
+	spell_table = master_table.select(
+			
 			pl.col("spell_name").str.strip_chars(),
 			pl.col("level").str.strip_chars().str.replace_many(
 				{
@@ -274,47 +276,83 @@ def format_spell_csv_pl(csv_name: str):
 				value = "Bonus Action",
 				literal = True 
 			),
-			pl.col("duration").str.strip_chars().str.strip_prefix("Concentration, ").str.replace_all(
+			pl.col("duration").str.strip_chars().str.strip_prefix("Concentration, ")
+			.str.replace_all(
 				pattern = "minute(s)?",
 				value = "Min."
-			).str.replace_all(
+			)
+			.str.replace_all(
 				pattern = "hour(s)?",
 				value = "Hr."
 			)
+			.map_elements(lambda duration: duration.capitalize(), return_dtype = pl.String),
+			pl.col("school").str.strip_chars().str.strip_suffix(" (ritual)"),
+			pl.col("range").str.strip_chars().str.replace_all(
+				pattern = "feet|foot",
+				value = "Ft."
+			)
+			.str.replace_all(
+				pattern = "mile(s)?",
+				value = "Mi."
+			),
+			pl.col("components").str.strip_chars(),
+			pl.col("description").str.strip_chars(),
+			pl.col("upcast_effect").str.strip_chars().str.strip_prefix("At Higher Levels. "),
+			pl.col("duration").str.contains("Concentration").alias("concentration"),
+			pl.col("school").str.contains("ritual").alias("ritual")
 		)
+
+	# evaluate, add spell_id column, then return to lazy mode
+	spell_table = spell_table.collect().with_row_index("spell_id").lazy()
+
+	dnd_classes = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"]
+	dnd_classes = pl.LazyFrame(
+		data =
+		{
+			"character_class_id": range(len(dnd_classes)),
+			"character_class": dnd_classes
+		},
+		schema =
+		{
+			"character_class_id": pl.UInt64,
+			"character_class": pl.String
+		}
 	)
+
+	# select standard and optional availability from master_table,
+	# trim, listify, then set union those lists
 	
+
+	# concat spell_id with unioned classes column wise,
+	# pivot longer, then drop nulls
+	class_availability = (
+		pl.concat(
+			[
+				spell_table.select(pl.col("spell_id")),
+				master_table.select(pl.col("character_classes").str.strip_chars().str.split(by = ", "))
+			],
+		how = "horizontal"
+	)
+	.explode("character_classes")
+	)
 	'''
-	spell_table.rename_axis("spell_id", inplace = True)
-
-	# useless text; "At Higher Levels" in an upcast column is just redundant
-	spell_table["upcast_effect"] = spell_table["upcast_effect"].str.removeprefix("At Higher Levels. ").str.strip()
-
-	# make boolean concentration column and clean up afterwards
-	spell_table["concentration"] = spell_table["duration"].str.contains("Concentration")
-	spell_table["duration"] = spell_table["duration"].str.removeprefix("Concentration, ").str.capitalize().str.strip()
-
-	# "casting_time" is already abbreviated, so we'll be consistent with abbreviations
-	spell_table["duration"] = spell_table["duration"].str.replace(pat = "minute(s)?", repl = "Min.", regex = True)
-	spell_table["duration"] = spell_table["duration"].str.replace(pat = "hour(s)?", repl = "Hr.", regex = True)
-
-	# chose to use abbreviations in the "duration" column so I should be consistent
-	spell_table["range"] = spell_table["range"].str.replace(pat = "feet|foot", repl = "Ft.", regex = True)
-	spell_table["range"] = spell_table["range"].str.replace(pat = "mile(s)?", repl = "Mi.", regex = True)
-
-	# make the boolean ritual column and clean up afterwards
-	spell_table["ritual"] = spell_table["school"].str.contains("ritual")
-	spell_table["school"] = spell_table["school"].str.removesuffix(" (ritual)").str.strip()
-
-
-	# construct DataFrame for the Class table
-	dnd_classes = pd.DataFrame(data = ["Wizard", "Cleric", "Sorcerer", "Bard", "Druid", "Artificer", "Paladin", "Warlock", "Ranger"], columns = ["character_class"])
-	dnd_classes.rename_axis("character_class_id", inplace = True)
-
+	class_availability = pl.concat(
+		[
+			spell_table.select(pl.col("spell_id")), 
+   			master_table.select(
+				# strip, listify, then union both columns
+				pl.col("character_classes").str.strip_chars().str.split(by = ", ")
+				.list.set_union(pl.col("optional_classes").str.strip_chars().str.split(by = ", "))
+				.alias("character_class")
+			)
+		],
+		how = "horizontal"
+	)
+	'''
+	'''
 	# listify, expand, and merge the class_availability with its corresponding spell_id
 
 	# listify and expand the classes column
-	class_availability = spell_table["character_class"].str.split(", ", expand = True)
 	class_availability = pd.concat([spell_table.index.to_series(), class_availability], axis = "columns")
 	class_availability = class_availability.melt(id_vars = "spell_id", value_name = "character_class").drop("variable", axis = "columns") # pivot longer
 	class_availability.dropna(inplace = True)
@@ -357,7 +395,7 @@ def format_spell_csv_pl(csv_name: str):
 
 	'''
 
-	return spell_table.collect()
+	return spell_table.collect(), class_availability.collect()
 
 
 def import_default_xyz(csv_name: str):
@@ -431,11 +469,12 @@ def import_default_links(csv_name: str):
 
 def main():
 	
-	#format_spell_csv("../spell_data/all_5e_spells.csv")
+	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
 	#import_default_xyz("../spell_data/kites_xyz_spells.csv")
 	#import_default_links("../spell_data/aleisters_link_spells.csv")
-	polar_spells = format_spell_csv_pl("../spell_data/all_5e_spells.csv")
-	print(polar_spells.head(10))
+	polar_spells, polars_classes = format_spell_csv_pl("../spell_data/all_5e_spells.csv")
+	#print(polar_spells.head(10))
+	#print(polars_classes.head(20))
 
 	return 0
 
