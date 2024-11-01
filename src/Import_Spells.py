@@ -453,6 +453,13 @@ def import_default_links(csv_name: str):
 	return link_table, class_availability
 
 
+def import_default_fusions(csv_name: str):
+
+	fusion_table = pd.DataFrame()
+	spell_fusion_table = pd.DataFrame()
+
+	return fusion_table, spell_fusion_table
+
 
 def main():
 	
