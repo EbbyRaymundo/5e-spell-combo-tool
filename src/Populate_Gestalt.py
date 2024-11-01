@@ -33,7 +33,7 @@ def main():
 
 	with sqlite3.connect("../Gestalt.db") as connection:
 		connection.execute("PRAGMA foreign_keys = ON")
-		
+
 		spell_table, class_table, spell_class_table = Import_Spells.format_spell_csv("../spell_data/all_5e_spells.csv")
 		fusion_table, spell_fusion_table = Import_Spells.import_default_fusions("../spell_data/aleisters_fusion_spells.csv")
 		xyz_table, xyz_class_table = Import_Spells.import_default_xyz("../spell_data/kites_xyz_spells.csv")
@@ -51,8 +51,6 @@ def main():
 			xyz_class_table,
 			link_class_table
 		)
-
-
 
 	return 0
 
