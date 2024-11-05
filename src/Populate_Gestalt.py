@@ -2,6 +2,15 @@ import sqlite3
 import pandas as pd
 import Import_Spells
 
+'''
+This file is used to insert all tables preprocessed in Import_Spells.py
+into their respective tables in the existing, empty database using
+an sqlite3 connection. This file does not need to be run by the user
+unless they are rebuilding their database.
+'''
+
+
+
 def populate_tables(connection: sqlite3.Connection,
 					spell_DataFrame: pd.DataFrame,
 					class_DataFrame: pd.DataFrame,
@@ -53,7 +62,6 @@ def main():
 		)
 
 	return 0
-
 
 
 if __name__ == "__main__":
