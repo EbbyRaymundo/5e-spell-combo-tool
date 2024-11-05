@@ -1,5 +1,5 @@
-import sqlite3
-import pandas as pd
+import adbc_driver_sqlite.dbapi as adbc
+
 
 
 
@@ -32,7 +32,7 @@ def add_spell(spell: tuple[str, int, str, str, str, str, str, str, str, bool, bo
 		Associated with all spellcasting classes if no list given.
 
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 		gestalt_cursor.execute("PRAGMA foreign_keys = ON")
 		
@@ -89,7 +89,7 @@ def add_XYZ(xyz: tuple[str, int, str, str, str, str, str], character_classes: li
 	-------
 	new_XYZ_id: int
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 		gestalt_cursor.execute("PRAGMA foreign_keys = ON")
 		# XYZ have no spell school, do not use concentration, can't be rituals, and have no upcast effects
@@ -146,7 +146,7 @@ def add_Link(link: tuple[str, int, str, str, str, str, str], character_classes: 
 	-------
 	new_Link_id: int
 	"""
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 		gestalt_cursor.execute("PRAGMA foreign_keys = ON")
 		# XYZ have no spell school, do not use concentration, can't be rituals, and have no upcast effects
@@ -190,7 +190,7 @@ def add_Fusion(fusion: tuple[str, str, str, str, bool], constituent_spells: list
 	-------
 	new_fusion_id: int
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 
 		gestalt_cursor.execute("PRAGMA foreign_keys = ON")
@@ -206,7 +206,7 @@ def add_Fusion(fusion: tuple[str, str, str, str, bool], constituent_spells: list
 		return new_Fusion_id
 
 
-def associate_classes(spell_id: int, character_classes: list[int], gestalt_cursor: sqlite3.Cursor):
+def associate_classes(spell_id: int, character_classes: list[int], gestalt_cursor: adbc.Cursor):
 	"""
 	Generate a list of [spell_id, character_class_id] lists
 	to associate a spell with character classes. Associates
