@@ -1,4 +1,4 @@
-import sqlite3
+import adbc_driver_sqlite.dbapi as adbc
 
 
 """
@@ -30,7 +30,7 @@ def get_counterspelled_Accel_Synchro(spell_id: int):
 	ValueError
 		Provided spell_id not found in Spell table
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 
 		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_id == ?", spell_id)
@@ -77,7 +77,7 @@ def get_reaction_Accel_Synchro(spell_id: int):
 	ValueError
 		Provided spell_id not found in Spell table
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 
 		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_id == ?", spell_id)
@@ -123,7 +123,7 @@ def get_main_action_Accel_Synchro(spell_id: int):
 	ValueError
 		Provided spell_id not found in Spell table
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 
 		gestalt_cursor.execute("SELECT * FROM Spell WHERE spell_id == ?", spell_id)
@@ -162,7 +162,7 @@ def get_Fusion_targets(spell_id: int):
 	target_fusions: list[tuple]
 		List of query results with tuples in format (Fusion.*, Spell.*)
 	'''
-	with sqlite3.connect("../Gestalt.db") as connection:
+	with adbc.connect("../Gestalt.db") as connection:
 		gestalt_cursor = connection.cursor()
 
 		gestalt_cursor.execute(
