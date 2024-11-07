@@ -1,4 +1,3 @@
-
 # 5e Spell Combo Tool
 This tool is a database with an API for querying and adding custom 5e spells. The spells intended to be added to the database are standard, XYZ, Fusion, and Link spells. Rather than adding Synchro spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and Accel Synchro targets.
 
@@ -14,16 +13,19 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
       - [Kite’s XYZ Spells](#kites-xyz-spells)
     - [Link Spellcasting](#link-spellcasting)
       - [What kind of Link spells can I use?](#what-kind-of-link-spells-can-i-use)
-  - [Unsupported Extra Deck Spellcasting Methods](#unsupported-extra-deck-spellcasting-methods)
-    - [Pendulum Spellcasting](#pendulum-spellcasting)
-    - [Delve Casting](#delve-casting)
+  - [Content Notice](#content-notice)
+
+
 
 ## Database Schema
 
 ![Entity Relationship Diagram](images/Gestalt_ERD.png)
 
+
+
 ## Supported Extra Deck spellcasting Methods
 The following spellcasting methods are supported by the database. These mechanics were made with the [gestalt rules](https://www.dandwiki.com/wiki/Gestalt_(5e_Variant_Rule)) for 5e in mind. Any reference to sorcery points can be substitued with a class resource per DM discretion.
+
 
 ### Synchro Spellcasting
 
@@ -72,6 +74,7 @@ For example, if a mage has the 1st-level spell Mage Armor active, they can consu
 1. **Polymerization** (1st lvl, Transmutation, Bonus Action, Self, V, S, M (at least 2 spells), Instantaneous): You attempt to fuse 2 or more spells in order to create a more powerful version that combines their aspects in some way. If you consume a number of sorcery points equal to the total level of both spells, you can use Polymerization without having to actually cast the spells. Both spell slots are consumed as if you had cast them.
 2. **Super Polymerization** (4th lvl, Transmutation, Action or Reaction, Self, V, S, M (at least 2 spells), Instantaneous): You fuse 2 or more spells in order to create a more powerful version that combines their aspects in some way. Both spell slots are consumed as if you had cast them. You may also use spells that your opponent is currently casting or has already cast whose effects remain. No one may attempt to interrupt the casting of this spell.
 
+
 ### XYZ Spellcasting
 
 XYZ spells have Ranks instead of Levels. If you run them this way, they can't be Counterspelled and are unaffected by Dispel Magic. You can instead still consider them as Levels in your own campaign.
@@ -115,6 +118,7 @@ XYZ spell creation is entirely up to GM discretion. Try to keep in mind what spe
    - **Around the World**: May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. A galaxy forms around you. You are the axis of its creation, the feeling of the planet's rotations fills you with great power. A power in which you can redirect others’ powers for your own. While this spell has overlay materials, any battle damage done to you is negated and instead inflicted on the one dealing the damage. As a Reaction, you can detach one material and target one creature: negate the effects of any magic spells or items that they currently have active on them for 1 Hr. As an Action, you can detach one material: cast the spell Time Stop with an additional base round.
    - **The True King of all Calamities**: May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. A large spectral dragon hovers over you, its very presence terrifying those who oppose the caster. While this spell has overlay materials, hostile creatures cannot regain hit points. As a Reaction, you can detach one material: until the beginning of your next turn, hostile creatures can not target you or your allies with spells or attacks.
 
+
 ### Link Spellcasting
 
 Link spells have Link Ratings instead of Levels. If you run them this way, they can't be Counterspelled and are unaffected by Dispel Magic. You can instead consider them to be Levels. For the sake of simplicity, they will be shown as Levels in the database and is left as a user decision to choose to run them as Link Ratings instead.
@@ -132,6 +136,7 @@ Link spells have Link Ratings instead of Levels. If you run them this way, they 
 
 To perform Link spellcasting, the caster summons a portal with empty magical circuit slots using their focus in one hand, and with the other hand, sends the saved spell energy into the corresponding circuits. The effect of this completed circuit manifests as a construct emerging from the portal.
 
+
 #### What kind of Link spells can I use?
 
 Link spells take a vast amount of resources to develop since the circuit pattern is unique to every Link spell, and require a vast amount of trial and error. Creating a Link spell should be made as a way to improve spellcasting efficiency, not necessarily to create new spells.
@@ -144,32 +149,6 @@ Link spells take a vast amount of resources to develop since the circuit pattern
    - **Ahashina**: As an Action, Link 2 spells that were the same level. When you XYZ cast a spell that requires exactly 2 spell slots as overlay materials and is the same rank as the level of the Linked spells, the XYZ spell requires only 1 spell slot and the associated number of sorcery points. If you XYZ spellcast while this Link spell is active, you can target one creature within 60 feet: cast Fireball on that creature as a free Action.
 
 
-## Unsupported Extra Deck Spellcasting Methods
 
-Pendulum spellcasting and Delve spellcasting are unsupported since Delve spellcasting only relies on spell slots and has no dependencies on other spells. This could later be changed if they are confirmed to have levels and maybe an associated spell school. XYZ would be in a similar situation but has an associated Link spell, and have Ranks which are similar enough to Levels. Pendulum spellcasting is just a matter of knowing the associated rules. It does not require keeping track of any new spells.
-
-### Pendulum Spellcasting
-
-1. The user must have the ability to cast spells innately.
-2. The user must have both hands-free meaning that they cannot carry a shield. At most, they can hold an arcane focus, wand, or staff.
-3. The user must have a number of sorcery points equal to the level of the spell they wish to cast.
-4. The user does not consume their Bonus Action, however, the user can only use their Bonus Action to XYZ, Synchro, or Fusion cast.
-5. The user can use other sorcery points, but only to perform the other spellcasting methods.
-6. Pendulum scales last until the end of the encounter.
-7. The concentration limit still applies.
-8. All spells resolve simultaneously.
-
-To perform any type of Pendulum Cast, a mage sets the Pendulum scales by consuming 2 different leveled spell slots, then casts their hand to the sky as the magical energy swings between these 2 visible spells. The energy then exits the resulting hole in space, casting the spells the mage wishes to cast. To Pendulum cast, one must consume a level of sorcery points equal to the total levels of the spells they are casting simultaneously, and they can only cast a number of spells equal to their proficiency bonus.
-
-### Delve Casting
-
-1. The user must have the ability to cast spells innately.
-2. The user must have a number of sorcery points (or equivalent) equal to the highest spell level used at the time of casting.
-3. The user must have both their magic focus and a 5 ft. cube of space for the item they are infusing. 
-4. The user loses one spell slot that is within 2 levels of the highest spell slot cast to perform the Ritual. The spell slot is unusable until the Delve spell is expended/lost.
-5. Items infused by Delve casting may hold the magic for a maximum of 1 week.
-6. The user must spend at least 1 hour casting this spell.
-7. Delve casting requires at least one item.
-8. One other caster may assist you in Delve casting, and split the costs. Any creature assisting in the casting must have access to the spell slots needed to cast, even if they are not using said slots. Some spells require enough resources that 2 casters are required in order for it to be cast.
-
-To cast a Delve spell, the user will require their magic focus as well as an item to focus your magical energy on. You, the object, and the area around you glows with a mist-like magical energy. During this process, the user(s) slowly release(es) their magic energy over time, allowing them to create new spells using multiple spell slots. The user maintains the magic of the spell by having the item slowly drain energy from the user, hence the locked off spell slot.
+## Content Notice
+This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
