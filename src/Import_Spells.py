@@ -223,70 +223,80 @@ def format_spell_csv(csv_name: str):
 def import_default_xyz(csv_name: str):
 	'''
 	Read a csv containing the default homebrew XYZ spells
+	and return DataFrames representing the XYZ table and
+	XYZ_Class junction table.
 	'''
-
-	""" xyz_table = pd.read_csv(
-	csv_name,
-	header = 0,
-	converters = # removes any whitespace issues immediately
-		{
-			"xyz_name": str.strip,
-			"casting_time": str.strip,
-			"duration": str.strip,
-			"range": str.strip,
-			"components": str.strip,
-			"description": str.strip
-		}
+	xyz_table = (
+		pl.scan_csv(
+			source = csv_name,
+			has_header = True,
+			new_columns = [
+				"xyz_name",
+				"rank",
+				"casting_time",
+				"duration",
+				"range",
+				"components",
+				"description",
+			]
+		)
+		.with_columns(
+			# rank is the only int column. stripping just to be safe :^)
+			pl.all().exclude("rank").str.strip_chars()
+		)
+		.with_row_index("xyz_id")
 	)
-	xyz_table.rename_axis("xyz_id", inplace = True, axis = "index")
 
-	# dtype = {"rank": "int64"} not working in the read_csv()
-	xyz_table = xyz_table.astype({"rank": "int64"})
+	class_availability = (
+		xyz_table.select(
+			pl.col("xyz_id"),
+			# 0:4 correspond to Wizard, Cleric, Sorcerer, Bard, Druid class_id's
+			pl.lit([0, 1, 2, 3, 4]).alias("character_class_id")
+		)
+		.explode("character_class_id")
+	)
 
-	# 0:4 correspond to Wizard, Cleric, Sorcerer, Bard, Druid class_id's
-	class_availability = pd.DataFrame(data = list(range(5)), columns = ["character_class_id"]).transpose()
-	# bind a repeating number of rows equal to the row count of the xyz_table
-	class_availability = pd.concat([class_availability] * xyz_table.shape[0]).reset_index(drop = True)
-
-	# listify and expand the classes column
-	class_availability = pd.concat([xyz_table.index.to_series(), class_availability], axis = "columns")
-	class_availability = class_availability.melt(id_vars = "xyz_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer """
-
-	return #xyz_table, class_availability
+	return xyz_table.collect(), class_availability.collect()
 
 
 def import_default_links(csv_name: str):
 	'''
 	Read a csv containing the default homebrew Link spells
+	and return DataFrames representing the Link table and
+	Link_Class junction table.
 	'''
-	"""link_table = pd.read_csv(
-	csv_name,
-	header = 0,
-	converters = # removes any whitespace issues immediately
-		{
-			"link_name": str.strip,
-			"casting_time": str.strip,
-			"duration": str.strip,
-			"range": str.strip,
-			"components": str.strip,
-			"description": str.strip
-		}
+	link_table = (
+		pl.scan_csv(
+			source = csv_name,
+			has_header = True,
+			new_columns = [
+				"link_name",
+				"rating",
+				"casting_time",
+				"duration",
+				"range",
+				"components",
+				"description",
+			]
+		)
+		.with_columns(
+			# rank is the only int column. stripping just to be safe :^)
+			pl.all().exclude("rating").str.strip_chars()
+		)
+		.with_row_index("link_id")
 	)
-	link_table.rename_axis("link_id", inplace = True, axis = "index")
 
-	# dtype = {"rating": "int64"} not working in the read_csv()
-	link_table = link_table.astype({"rating": "int64"})
+	class_availability = (
+		link_table.select(
+			pl.col("link_id"),
+			# 0:9 corresponds to all spellcasting classes. Any can use Links.
+			pl.lit([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).alias("character_class_id")
+		)
+		.explode("character_class_id")
+	)
 
-	# 0:8 correspond to all spellcasting class_id's
-	class_availability = pd.DataFrame(data = list(range(9)), columns = ["character_class_id"]).transpose()
-	# bind a repeating number of rows equal to the row count of the link_table
-	class_availability = pd.concat([class_availability] * link_table.shape[0]).reset_index(drop = True)
-
-	# listify and expand the classes column
-	class_availability = pd.concat([link_table.index.to_series(), class_availability], axis = "columns")
-	class_availability = class_availability.melt(id_vars = "link_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer
- 	"""
-	return #link_table, class_availability
+	
+	return link_table.collect(), class_availability.collect()
 
 
 def import_default_fusions(csv_name: str):
@@ -303,12 +313,11 @@ def import_default_fusions(csv_name: str):
 def main():
 	
 	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
-	#import_default_xyz("../spell_data/kites_xyz_spells.csv")
-	#import_default_links("../spell_data/aleisters_link_spells.csv")
-	polar_spells, polars_classes, polars_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
-	#print(polar_spells.head(10))
-	#sprint(polars_classes.height)
-	#print(polars_classes)
+	#xyz_table, xyz_class = import_default_xyz("../spell_data/kites_xyz_spells.csv")
+	link_table, link_class = import_default_links("../spell_data/aleisters_link_spells.csv")
+	print(link_table.head(10))
+	print(link_table.height)
+	print(link_class.height)
 
 	return 0
 
