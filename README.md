@@ -1,3 +1,4 @@
+
 # 5e Spell Combo Tool
 This tool is a database with an API for querying and adding custom 5e spells. The spells intended to be added to the database are standard, [XYZ](#xyz-spellcasting), [Fusion](#fusion-spellcasting), and [Link](#link-spellcasting) spells. Rather than adding [Synchro](#synchro-spellcasting) spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and [Accel Synchro](#accelerated-synchro-spellcasting-aka-accel-synchro) targets.
 
@@ -160,7 +161,4 @@ Link spells take a vast amount of resources to develop since the circuit pattern
 
 
 # Notice of SRD 5.1 Content
-This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of 
-the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The 
-SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at 
-https://creativecommons.org/licenses/by/4.0/legalcode.
+This work includes material taken from the System Reference Document 5.1 (“SRD 5.1”) by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
