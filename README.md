@@ -16,6 +16,11 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
     - [Kite’s XYZ Spells](#kites-xyz-spells)
   - [Link Spellcasting](#link-spellcasting)
     - [What kind of Link spells can I use?](#what-kind-of-link-spells-can-i-use)
+    - [Aleister's Link Spells](#aleisters-link-spells)
+- [Adding Your Own Spells](#adding-your-own-spells)
+  - [Fusion](#fusion)
+  - [XYZ](#xyz)
+  - [Link](#link)
 - [Database Schema](#database-schema)
 - [Notice of SRD 5.1 Content](#notice-of-srd-51-content)
 
@@ -145,6 +150,8 @@ To perform Link spellcasting, the caster summons a portal with empty magical cir
 
 Link spells take a vast amount of resources to develop since the circuit pattern is unique to every Link spell, and require a vast amount of trial and error. Creating a Link spell should be made as a way to improve spellcasting efficiency, not necessarily to create new spells.
 
+### Aleister's Link Spells
+
 1. Link 2 spells
    - **Verte Anaconda**: As an Action, Link 2 spells. You can spend an amount of hit points equal to 1/4 of your max hit points to cast any "Fusion" or "Polymerization" spell instead of consuming a spell slot.
    - **Halqifibrax**: As an Action, Link 1 Synchro spell and 1 other spell. When you Synchro spellcast, you can tune the spell without expending a spell slot if the upcast is 3 levels or lower. As a Reaction, you can dispel Halqifibrax and immediately Synchro spellcast any spell without expending any resources.
@@ -153,6 +160,19 @@ Link spells take a vast amount of resources to develop since the circuit pattern
    - **Ahashina**: As an Action, Link 2 spells that were the same level. When you XYZ cast a spell that requires exactly 2 spell slots as overlay materials and is the same rank as the level of the Linked spells, the XYZ spell requires only 1 spell slot and the associated number of sorcery points. If you XYZ spellcast while this Link spell is active, you can target one creature within 60 feet: cast Fireball on that creature 
 
 
+
+# Adding Your Own Spells
+The following tables will serve as a guide for how you should format each spell type before you add it to the database.
+
+## Fusion
+![Fusion Spells](spell_data/aleisters_fusion_spells.csv)
+
+## XYZ
+![XYZ Spells](spell_data/Spells.csv)
+
+
+## Link
+![Link Spells](spell_data/aleisters_link_spells.csv)
 
 # Database Schema
 
