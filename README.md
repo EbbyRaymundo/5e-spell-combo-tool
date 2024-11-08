@@ -21,6 +21,10 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
   - [Fusion](#fusion)
   - [XYZ](#xyz)
   - [Link](#link)
+- [Interesting Spell Stats](#interesting-spell-stats)
+  - [Distribution of Spells by School](#distribution-of-spells-by-school)
+  - [Distribution of Spell Schools by Level](#distribution-of-spell-schools-by-level)
+  - [Distribution of Spells by Casting Time](#distribution-of-spells-by-casting-time)
 - [Database Schema](#database-schema)
 - [Notice of SRD 5.1 Content](#notice-of-srd-51-content)
 
@@ -173,6 +177,25 @@ The following tables will serve as a guide for how you should format each spell 
 
 ## Link
 ![Link Spells](spell_data/aleisters_link_spells.csv)
+
+
+
+# Interesting Spell Stats
+
+## Distribution of Spells by School
+![Spells by School](images/spells_by_school.png)
+
+
+## Distribution of Spell Schools by Level
+
+![Schools by Level](images/schools_by_level.png)
+
+
+## Distribution of Spells by Casting Time
+
+![Spells by Casting Time](images/spells_by_casting_time.png)
+
+
 
 # Database Schema
 
