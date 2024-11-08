@@ -22,6 +22,8 @@ def create_spell_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE Spell (
@@ -66,6 +68,8 @@ def create_class_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE Class(
@@ -91,6 +95,8 @@ def create_fusion_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE Fusion(
@@ -99,7 +105,7 @@ def create_fusion_table(connection: adbc.Connection):
 			duration TEXT NOT NULL,
 			range TEXT NOT NULL,
 			description TEXT UNIQUE NOT NULL,
-			concentration INTEGER CHECK (concentration IN (0, 1)) NOT NULL,
+			concentration INTEGER CHECK (concentration IN (0, 1)) NOT NULL
 		)
 		"""
 	)
@@ -120,6 +126,8 @@ def create_xyz_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE XYZ(
@@ -151,6 +159,8 @@ def create_link_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE Link(
@@ -182,6 +192,8 @@ def create_spell_class_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE Spell_Class(
@@ -210,42 +222,8 @@ def create_spell_fusion_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
-	connection.execute(
-		"""
-		CREATE TABLE Spell_Fusion(
-			spell_id INTEGER NOT NULL,
-			fusion_id INTEGER NOT NULL,
-			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
-			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id) ON DELETE CASCADE,
-			PRIMARY KEY (spell_id, fusion_id)
-		)
-		"""
-	)
+	connection = connection.cursor()
 
-	# this index will optimize the get_Fusion_targets() function in Query_Gestalt.py
-	connection.execute(
-		"""
-		CREATE INDEX Spell_Fusion_fusion_id_idx 
-		ON Spell_Fusion(fusion_id)
-		"""
-		)
-
-	return 0
-
-
-def create_spell_fusion_table(connection: adbc.Connection):
-	'''
-	Initialize the Spell_Fusion junction table with FK constraints.
-
-	Parameters
-	----------
-	connection: adbc.Connection
-
-	Returns
-	-------
-	0: int
-		Function successful.
-	'''
 	connection.execute(
 		"""
 		CREATE TABLE Spell_Fusion(
@@ -274,6 +252,8 @@ def create_xyz_class_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE XYZ_Class(
@@ -302,6 +282,8 @@ def create_link_class_table(connection: adbc.Connection):
 	0: int
 		Function successful.
 	'''
+	connection = connection.cursor()
+
 	connection.execute(
 		"""
 		CREATE TABLE Link_Class(
