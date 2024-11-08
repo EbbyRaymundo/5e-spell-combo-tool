@@ -90,7 +90,7 @@ def get_main_action_Accel_Synchro(connection, spell_id: int):
 def get_Fusion_targets(connection, spell_id: int):
 	'''
 	Given a spell_id, return any available Fusion spell targets and their
-	spell components, EXCEPT for the input spell.
+	constituent spell components, EXCEPT for the input spell.
 
 	Parameters
 	----------
