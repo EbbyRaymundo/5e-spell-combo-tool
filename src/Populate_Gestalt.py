@@ -85,8 +85,11 @@ def main():
 
 	with adbc.connect("../Gestalt.db") as connection:
 		
-		connection = connection.cursor()
-		connection.execute("PRAGMA foreign_keys = ON")
+		with connection.cursor() as cursor:
+
+			cursor.execute("PRAGMA foreign_keys = ON")
+
+		connection.commit()
 
 		spell_table, class_table, spell_class_table = Import_Spells.format_spell_csv("../spell_data/Spells.csv")
 		#fusion_table, spell_fusion_table = Import_Spells.import_default_fusions("../spell_data/aleisters_fusion_spells.csv")
@@ -110,6 +113,8 @@ def main():
 			xyz_class_table,
 			link_class_table
 		)
+		
+
 
 	return 0
 

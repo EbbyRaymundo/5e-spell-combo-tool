@@ -9,20 +9,19 @@ tables.
 
 
 
-def create_spell_table(connection: adbc.Connection):
+def create_spell_table(connection: adbc.Cursor):
 	'''
 	Initialize the Spell table with constraints.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -55,20 +54,19 @@ def create_spell_table(connection: adbc.Connection):
 	return 0
 
 
-def create_class_table(connection: adbc.Connection):
+def create_class_table(connection: adbc.Cursor):
 	'''
 	Initialize the Class table with the PK constraint.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -82,20 +80,19 @@ def create_class_table(connection: adbc.Connection):
 	return 0
 
 
-def create_fusion_table(connection: adbc.Connection):
+def create_fusion_table(connection: adbc.Cursor):
 	'''
 	Initialize the Fusion table with the PK constraint.
 
 	Paramters
 	---------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -113,20 +110,19 @@ def create_fusion_table(connection: adbc.Connection):
 	return 0
 
 
-def create_xyz_table(connection: adbc.Connection):
+def create_xyz_table(connection: adbc.Cursor):
 	'''
 	Initialize the XYZ table with constraints.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -146,20 +142,19 @@ def create_xyz_table(connection: adbc.Connection):
 	return 0
 
 
-def create_link_table(connection: adbc.Connection):
+def create_link_table(connection: adbc.Cursor):
 	'''
 	Initialize the Link table with constraints.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -179,20 +174,19 @@ def create_link_table(connection: adbc.Connection):
 	return 0
 
 
-def create_spell_class_table(connection: adbc.Connection):
+def create_spell_class_table(connection: adbc.Cursor):
 	'''
 	Initialize the Spell_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -209,20 +203,19 @@ def create_spell_class_table(connection: adbc.Connection):
 	return 0
 
 
-def create_spell_fusion_table(connection: adbc.Connection):
+def create_spell_fusion_table(connection: adbc.Cursor):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -239,20 +232,19 @@ def create_spell_fusion_table(connection: adbc.Connection):
 	return 0
 
 
-def create_xyz_class_table(connection: adbc.Connection):
+def create_xyz_class_table(connection: adbc.Cursor):
 	'''
 	Initialize the XYZ_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -269,20 +261,19 @@ def create_xyz_class_table(connection: adbc.Connection):
 	return 0
 
 
-def create_link_class_table(connection: adbc.Connection):
+def create_link_class_table(connection: adbc.Cursor):
 	'''
 	Initialize the Link_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection
+	connection: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
-	connection = connection.cursor()
 
 	connection.execute(
 		"""
@@ -300,18 +291,21 @@ def main():
 
 	with adbc.connect("../Gestalt.db") as connection:
 
-		# main tables
-		create_spell_table(connection)
-		create_class_table(connection)
-		create_fusion_table(connection)
-		create_xyz_table(connection)
-		create_link_table(connection)
+		with connection.cursor() as cursor:
+			# main tables
+			create_spell_table(cursor)
+			create_class_table(cursor)
+			create_fusion_table(cursor)
+			create_xyz_table(cursor)
+			create_link_table(cursor)
 
-		# junction tables
-		create_spell_class_table(connection)
-		create_spell_fusion_table(connection)
-		create_xyz_class_table(connection)
-		create_link_class_table(connection)
+			# junction tables
+			create_spell_class_table(cursor)
+			create_spell_fusion_table(cursor)
+			create_xyz_class_table(cursor)
+			create_link_class_table(cursor)
+
+		connection.commit()
 
 	return 0
 
