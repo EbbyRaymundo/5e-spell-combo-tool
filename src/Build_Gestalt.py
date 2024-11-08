@@ -295,7 +295,7 @@ def create_link_class_table(connection: adbc.Connection):
 
 	Parameters
 	----------
-	connection: Connection
+	connection
 
 	Returns
 	-------

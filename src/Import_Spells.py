@@ -46,8 +46,8 @@ def format_spell_JSON(JSON_name: str):
 
 	return
 
-def format_spell_csv(csv_name: str):
 
+def format_spell_csv(csv_name: str):
 	'''
 	Read the csv from 5etools containing all spells currently available on the website,
 	clean entries to remove unnecessary information or create additional columns,
@@ -320,6 +320,7 @@ def main():
 	print(link_class.height)
 
 	return 0
+
 
 
 if __name__ == "__main__":
