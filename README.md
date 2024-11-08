@@ -5,7 +5,7 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
 - [5e Spell Combo Tool](#5e-spell-combo-tool)
 - [Dependencies](#dependencies)
   - [Polars Version](#polars-version)
-- [Pandas Version](#pandas-version)
+  - [Pandas Version](#pandas-version)
 - [Supported Extra Deck spellcasting Methods](#supported-extra-deck-spellcasting-methods)
   - [Synchro Spellcasting](#synchro-spellcasting)
     - [Accelerated Synchro Spellcasting (A.K.A. Accel Synchro)](#accelerated-synchro-spellcasting-aka-accel-synchro)
@@ -27,7 +27,7 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
 - adbc-driver-sqlite
 - pyarrow-core
 
-# Pandas Version
+## Pandas Version
 - python
 - pandas
 
