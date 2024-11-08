@@ -44,25 +44,7 @@ def format_spell_JSON(JSON_name: str):
 	- Add spell_type (they're all "standard")
 	'''
 
-	spell_table = pd.read_json(JSON_name).transpose()
-
-	# pull the spell names out of the row indices, give them their own 
-	# named column, and change row indices into auto-incrementing integers
-	spell_table.reset_index(inplace = True, names = "spell")
-
-	# TODO: Do the entire upcast effect in the "upcast_effect" column
-	# insead of just doing a boolean here. Will have to do a substring
-	# and trim out the upcast portion. Remove "At Higher Levels" since
-	# that's implicit if it has an upcast effect.
-	spell_table["upcast_effect"] = spell_table["description"].apply(lambda spell_description: "At Higher Levels" in spell_description)
-	spell_table["concentration"] = spell_table["duration"].apply(lambda spell_duration: "Concentration" in spell_duration)
-
-	# TODO: replace this line with the Pandas .replace() function.
-	# "Concentration, " can be cut out of the duration since it doesn't entail any further description, unlike "has_upcast_effect"
-	spell_table["duration"] = spell_table["duration"].apply(lambda duration: duration.replace("Concentration, ", "").capitalize())
-	spell_table["spell_type"] = "standard" # every spell is standard since we'll add XYZ, Fusion, Links later
-
-	return spell_table.infer_objects(copy = False) # may have to force the "Object" types into strings later.
+	return
 
 
 def format_spell_csv(csv_name: str):
@@ -83,6 +65,19 @@ def format_spell_csv(csv_name: str):
 	- Create a table with all spellcasting classes (except you Monks that only have one spell)
 		- Subclasses are not considered since that data is irrelevant for to the purpose of the database
 	- Create a junction table between the spells and classes
+
+	Parameters
+	----------
+	csv_name: str
+
+	Returns
+	-------
+	spell_table:
+		Data frame containing variables specified in Spell within Gestalt_ERD.png.
+	dnd_classes:
+		Data frame containing variables specified in Class within Gestalt_ERD.png.
+	all_availability:
+		Data frame containing variables specified in Spell_Class within Gestalt_ERD.png.
 	'''
 
 	spell_table = pd.read_csv(
@@ -215,77 +210,60 @@ def format_spell_csv(csv_name: str):
 def import_default_xyz(csv_name: str):
 	'''
 	Read a csv containing the default homebrew XYZ spells
+
+	Parameters
+	----------
+	csv_name: str
+
+	Returns
+	-------
+	xyz_table:
+		Data frame containing variables specified in XYZ within Gestalt_ERD.png.
+	class_availability:
+		Data frame containing variables specified in XYZ_Class within Gestalt_ERD.png.
 	'''
-	xyz_table = pd.read_csv(
-	csv_name,
-	header = 0,
-	converters = # removes any whitespace issues immediately
-		{
-			"xyz_name": str.strip,
-			"casting_time": str.strip,
-			"duration": str.strip,
-			"range": str.strip,
-			"components": str.strip,
-			"description": str.strip
-		}
-	)
-	xyz_table.rename_axis("xyz_id", inplace = True, axis = "index")
 
-	# dtype = {"rank": "int64"} not working in the read_csv()
-	xyz_table = xyz_table.astype({"rank": "int64"})
-
-	# 0:4 correspond to Wizard, Cleric, Sorcerer, Bard, Druid class_id's
-	class_availability = pd.DataFrame(data = list(range(5)), columns = ["character_class_id"]).transpose()
-	# bind a repeating number of rows equal to the row count of the xyz_table
-	class_availability = pd.concat([class_availability] * xyz_table.shape[0]).reset_index(drop = True)
-
-	# listify and expand the classes column
-	class_availability = pd.concat([xyz_table.index.to_series(), class_availability], axis = "columns")
-	class_availability = class_availability.melt(id_vars = "xyz_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer
-
-	return xyz_table, class_availability
+	return
 
 
 def import_default_links(csv_name: str):
 	'''
 	Read a csv containing the default homebrew Link spells
+
+	Parameters
+	----------
+	csv_name: str
+
+	Returns
+	-------
+	link_table:
+		Data frame containing variables specified in Link within Gestalt_ERD.png.
+	class_availability:
+		Data frame containing variables specified in Link_Class within Gestalt_ERD.png.
 	'''
-	link_table = pd.read_csv(
-	csv_name,
-	header = 0,
-	converters = # removes any whitespace issues immediately
-		{
-			"link_name": str.strip,
-			"casting_time": str.strip,
-			"duration": str.strip,
-			"range": str.strip,
-			"components": str.strip,
-			"description": str.strip
-		}
-	)
-	link_table.rename_axis("link_id", inplace = True, axis = "index")
 
-	# dtype = {"rating": "int64"} not working in the read_csv()
-	link_table = link_table.astype({"rating": "int64"})
-
-	# 0:8 correspond to all spellcasting class_id's
-	class_availability = pd.DataFrame(data = list(range(9)), columns = ["character_class_id"]).transpose()
-	# bind a repeating number of rows equal to the row count of the link_table
-	class_availability = pd.concat([class_availability] * link_table.shape[0]).reset_index(drop = True)
-
-	# listify and expand the classes column
-	class_availability = pd.concat([link_table.index.to_series(), class_availability], axis = "columns")
-	class_availability = class_availability.melt(id_vars = "link_id", value_name = "character_class_id").drop("variable", axis = "columns") # pivot longer
-
-	return link_table, class_availability
+	return
 
 
-def import_default_fusions(csv_name: str):
+def import_default_fusions(csv_name: str, spell_table):
+	'''
+	Read a csv containing the default homebrew Link spells
 
-	fusion_table = pd.DataFrame()
-	spell_fusion_table = pd.DataFrame()
+	Parameters
+	----------
+	csv_name: str
+	spell_table:
+		Data frame of the Spell table specified within Gestalt_ERD.png.
 
-	return fusion_table, spell_fusion_table
+	Returns
+	-------
+	fusion_table:
+		Data frame containing variables specified in Link within Gestalt_ERD.png.
+	spell_associations:
+		Data frame containing variables specified in Spell_Fusion within Gestalt_ERD.png.
+	'''
+
+	return
 
 
 def main():
@@ -297,6 +275,7 @@ def main():
 
 
 	return 0
+
 
 
 if __name__ == "__main__":

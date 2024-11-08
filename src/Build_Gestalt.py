@@ -1,5 +1,3 @@
-import sqlite3
-
 '''
 This file is for creating the tables for the Gestalt database
 and adding constraints. This does not need to be run by the user
@@ -9,13 +7,13 @@ tables.
 
 
 
-def create_spell_table(connection: sqlite3.Connection):
+def create_spell_table(connection):
 	'''
 	Initialize the Spell table with constraints.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -53,13 +51,13 @@ def create_spell_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_class_table(connection: sqlite3.Connection):
+def create_class_table(connection):
 	'''
 	Initialize the Class table with the PK constraint.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -78,13 +76,13 @@ def create_class_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_fusion_table(connection: sqlite3.Connection):
+def create_fusion_table(connection):
 	'''
 	Initialize the Fusion table with the PK constraint.
 
 	Paramters
 	---------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -107,7 +105,7 @@ def create_fusion_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_xyz_table(connection: sqlite3.Connection):
+def create_xyz_table(connection):
 	'''
 	Initialize the XYZ table with constraints.
 
@@ -138,13 +136,13 @@ def create_xyz_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_link_table(connection: sqlite3.Connection):
+def create_link_table(connection):
 	'''
 	Initialize the Link table with constraints.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -169,13 +167,13 @@ def create_link_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_spell_class_table(connection: sqlite3.Connection):
+def create_spell_class_table(connection):
 	'''
 	Initialize the Spell_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -197,13 +195,13 @@ def create_spell_class_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_spell_fusion_table(connection: sqlite3.Connection):
+def create_spell_fusion_table(connection):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -233,13 +231,13 @@ def create_spell_fusion_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_spell_fusion_table(connection: sqlite3.Connection):
+def create_spell_fusion_table(connection):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -261,13 +259,13 @@ def create_spell_fusion_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_xyz_class_table(connection: sqlite3.Connection):
+def create_xyz_class_table(connection):
 	'''
 	Initialize the XYZ_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: sqlite3.Connection
+	connection
 
 	Returns
 	-------
@@ -289,13 +287,13 @@ def create_xyz_class_table(connection: sqlite3.Connection):
 	return 0
 
 
-def create_link_class_table(connection: sqlite3.Connection):
+def create_link_class_table(connection):
 	'''
 	Initialize the Link_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: Connection
+	connection
 
 	Returns
 	-------
@@ -315,21 +313,6 @@ def create_link_class_table(connection: sqlite3.Connection):
 	)
 
 def main():
-
-	with sqlite3.connect("../Gestalt.db") as connection:
-
-		# main tables
-		create_spell_table(connection)
-		create_class_table(connection)
-		create_fusion_table(connection)
-		create_xyz_table(connection)
-		create_link_table(connection)
-
-		# junction tables
-		create_spell_class_table(connection)
-		create_spell_fusion_table(connection)
-		create_xyz_class_table(connection)
-		create_link_class_table(connection)
 
 	return 0
 
