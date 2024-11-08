@@ -1,5 +1,6 @@
 '''
-This file adds new spells into Gestalt.db.
+This file adds new spells into Gestalt.db and handles
+the appropriate junction table insertions.
 '''
 
 
