@@ -248,8 +248,9 @@ def associate_classes(cursor: sqlite3.Cursor, spell_id: int, character_classes: 
 	'''
 	if not character_classes: # passed an empty list, associate with all classes
 		cursor.execute("SELECT character_class_id FROM Class")
-	# unpack the result to match the character_classes param
-	character_classes = [character_class[0] for character_class in cursor.fetchall()]
+
+		# unpack the result to match the character_classes param
+		character_classes = [character_class[0] for character_class in cursor.fetchall()]
 
 	# return our list of [spell_id, character_class_id] lists
 	return [[spell_id, character_class_id] for character_class_id in character_classes]
