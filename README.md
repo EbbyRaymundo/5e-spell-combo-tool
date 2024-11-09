@@ -14,19 +14,19 @@ This tool is a database with an API for querying and adding custom 5e spells. Th
   - [XYZ Spellcasting](#xyz-spellcasting)
     - [What kind of XYZ spells can I use?](#what-kind-of-xyz-spells-can-i-use)
     - [Kite’s XYZ Spells](#kites-xyz-spells)
-      - [Rank 1 spells](#rank-1-spells)
-      - [Rank 2 spells](#rank-2-spells)
-      - [Rank 3 spells](#rank-3-spells)
-      - [Rank 4 spells](#rank-4-spells)
-      - [Rank 5 spells](#rank-5-spells)
-      - [Rank 6 spells](#rank-6-spells)
-      - [Rank 7 spells](#rank-7-spells)
-      - [Rank 8 spells](#rank-8-spells)
-      - [Rank 9 spells](#rank-9-spells)
+      - [Rank 1](#rank-1)
+      - [Rank 2](#rank-2)
+      - [Rank 3](#rank-3)
+      - [Rank 4](#rank-4)
+      - [Rank 5](#rank-5)
+      - [Rank 6](#rank-6)
+      - [Rank 7](#rank-7)
+      - [Rank 8](#rank-8)
+      - [Rank 9](#rank-9)
   - [Link Spellcasting](#link-spellcasting)
     - [What kind of Link spells can I use?](#what-kind-of-link-spells-can-i-use)
     - [Aleister's Link Spells](#aleisters-link-spells)
-      - [Link 2 spells](#link-2-spells)
+      - [Link 2](#link-2)
 - [Adding Your Own Spells](#adding-your-own-spells)
   - [Fusion](#fusion)
   - [XYZ](#xyz)
@@ -121,34 +121,34 @@ XYZ spell creation is entirely up to GM discretion. Try to keep in mind what spe
 
 ### Kite’s XYZ Spells
 
-#### Rank 1 spells
+#### Rank 1
    - **Starlight Blessing**: A hole in space opens above the caster’s head, revealing a beautiful, starry nebula. While this spell has overlay materials, you may reroll one attack roll per turn. You may not know the result of the first attack roll and must take the second roll. As a Reaction, you can detach one overlay material to make an opponent reroll an attack roll before the result is declared.
    - **XYZ Armor**: There appears to be no obvious visible effect unless further investigated with Detect Magic. While this spell has overlay materials, your base AC becomes 14 + your Charisma modifier + your Dexterity modifier. As a Reaction, you can detach one material: for the rest of the turn, you gain +5 AC and resistance to bludgeoning, slashing, and piercing damage. XYZ Armor lasts for 24 hours.
    - **Numeron Dragon**: May also use 2 preexisting XYZ spells of equal rank and 2 sorcery points as material to cast. A majestic golden dragon floats above the caster, ready to unleash his wrath upon his enemies. Numeron Dragon is not dispelled when it no longer has materials. As an Action, you can detach one material: deal radiant damage to one creature you can see within 60 Ft. of you equal to the total rank of all XYZ spells currently on the field * 10. At the end of your next turn, if this spell has no more material, cast the spell Antimagic Field on yourself with a range of 60 Ft. and a duration of 1 round. Numeron Dragon is dispelled when the Antimagic Field ends.
    - **Big Bang Blast**: A large galaxy appears over the caster, but as time goes on it draws in on itself more and more until it becomes merely a small pocket of energy. When it reaches a certain size, it detonates. Must have all other spell slots be used up in the creation of XYZ spells. All overlay spells must deal damage in some way, and can also be cast using any 2 or more spells of the same level. When cast, target up to 5 targets. Each target is then marked with a galaxy. At the end of your turn, detach one material. When all overlay materials are used up, deal average damage of all overlay spells used to all targets as radiant damage.
 
-#### Rank 2 spells
+#### Rank 2
    - **Photon Force**: Your body shimmers with the light of a star. While this spell has overlay materials, gain advantage on all attack rolls while you are not within 5 Ft. of any enemy. As a Reaction, you can detach a material and force an opponent to make a Strength saving throw. On a failure, they are pushed 30 feet away from you.
 
-#### Rank 3 spells
+#### Rank 3
    - **Quazar Cannon**: A brilliant bright light floats above the caster, almost as if it is a window into Heaven itself. While this spell has overlay materials, it raises the light level within 30 Ft. to bright light. As an Action, you can detach one material: make a ranged spell attack to fire one blast of intense light at one creature within 60 Ft., dealing 10d6 radiant damage on a successful hit.
 
-#### Rank 4 spells
+#### Rank 4
    - **Utopia Planitia**: Wings that contain magnificent constellations form on your back carrying the strength of a gamma burst, ready to protect you. While this spell has overlay materials, any time you declare an attack your opponent’s AC becomes 10 until the end of your turn. As a Reaction, you can detach one material: negate one attack being made against you.
 
-#### Rank 5 spells
+#### Rank 5
    - **Solar Flare**: Wisps of what looks like flames erupt from the caster with intense power. While this spell still has overlay materials, creatures within 15 Ft. takes fire damage equal to your level at the start of your turn. As an Action, you may detach one material: fire one flare at a creature within 60 Ft., they are afflicted with the same effects of being in an Antimagic Field until the start of your next turn and take 8d6 fire damage.
 
-#### Rank 6 spells
+#### Rank 6
    - **Galaxy Dragon**: May also use a preexisting XYZ spell of rank 2 and 2 Sorcery points as material to cast. A brilliant blue dragon with the eyes of a galaxy floats above the caster, ready to protect him from any incoming attack. As a Reaction, when an enemy casts a spell you can detach one material: Galaxy Dragon steals the spell from them and you can cast it instead using their spell slot but with your statistics.
 
-#### Rank 7 spells
+#### Rank 7
    - **Void Vacuum**: May also use a preexisting XYZ spell of rank 3 and 3 Sorcery points as material to cast. A dark energy surrounds you, pulling enemies into its foul embrace. While this spell has overlay materials, it pulls all creatures within 30 Ft. towards you (5 Ft. per turn). This movement cannot be resisted. In order to move away from you, hostile creatures must make a Strength saving throw. Hostile creatures within 15 Ft. of you are dealt 2d10 necrotic damage at the start of your turn. As an Action, you may detach one material: target one creature to make a Strength saving throw. On a failure, they are pulled within 5 Ft. of you and are dealt double necrotic damage until the start of your next turn.
 
-#### Rank 8 spells
+#### Rank 8
    - **Graviton Force**: May also use a preexisting XYZ spell of rank 4 and 4 Sorcery points as material to cast. A large transparent sphere appears around the caster, making even floating leaves crash to the ground with more force than is natural. While this spell has overlay materials, any enemy within 30 Ft. of you must make a Strength saving throw in order to move, use an Action, Bonus Action, or Reaction. As an Action, you can detach one material and spend 1 Sorcery point: immediately after, XYZ cast a spell of rank 3 or lower with 1 material.
 
-#### Rank 9 spells
+#### Rank 9
    - **Around the World**: May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. A galaxy forms around you. You are the axis of its creation, the feeling of the planet's rotations fills you with great power. A power in which you can redirect others’ powers for your own. While this spell has overlay materials, any battle damage done to you is negated and instead inflicted on the one dealing the damage. As a Reaction, you can detach one material and target one creature: negate the effects of any magic spells or items that they currently have active on them for 1 Hr. As an Action, you can detach one material: cast the spell Time Stop with an additional base round.
    - **The True King of all Calamities**: May also use a preexisting XYZ spell of rank 5 and 5 Sorcery points as material to cast. A large spectral dragon hovers over you, its very presence terrifying those who oppose the caster. While this spell has overlay materials, hostile creatures cannot regain hit points. As a Reaction, you can detach one material: until the beginning of your next turn, hostile creatures can not target you or your allies with spells or attacks.
 
@@ -175,7 +175,7 @@ Link spells take a vast amount of resources to develop since the circuit pattern
 
 ### Aleister's Link Spells
 
-#### Link 2 spells
+#### Link 2
 
 1. **Verte Anaconda**: As an Action, Link 2 spells. You can spend an amount of hit points equal to 1/4 of your max hit points to cast any "Fusion" or "Polymerization" spell instead of consuming a spell slot.
 2. **Halqifibrax**: As an Action, Link 1 Synchro spell and 1 other spell. When you Synchro spellcast, you can tune the spell without expending a spell slot if the upcast is 3 levels or lower. As a Reaction, you can dispel Halqifibrax and immediately Synchro spellcast any spell without expending any resources.
