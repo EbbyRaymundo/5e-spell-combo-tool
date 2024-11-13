@@ -9,13 +9,13 @@ tables.
 
 
 
-def create_spell_table(cursor):
+def create_spell_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Spell table with constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -55,13 +55,13 @@ def create_spell_table(cursor):
 	return 0
 
 
-def create_class_table(cursor):
+def create_class_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Class table with the PK constraint.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -80,13 +80,13 @@ def create_class_table(cursor):
 	return 0
 
 
-def create_fusion_table(cursor):
+def create_fusion_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Fusion table with the PK constraint.
 
 	Paramters
 	---------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -109,13 +109,13 @@ def create_fusion_table(cursor):
 	return 0
 
 
-def create_xyz_table(cursor):
+def create_xyz_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the XYZ table with constraints.
 
 	Parameters
 	----------
-	cursor: sqlite3.cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -140,13 +140,13 @@ def create_xyz_table(cursor):
 	return 0
 
 
-def create_link_table(cursor):
+def create_link_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Link table with constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -171,13 +171,13 @@ def create_link_table(cursor):
 	return 0
 
 
-def create_spell_class_table(cursor):
+def create_spell_class_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Spell_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -199,13 +199,13 @@ def create_spell_class_table(cursor):
 	return 0
 
 
-def create_spell_fusion_table(cursor):
+def create_spell_fusion_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -235,13 +235,13 @@ def create_spell_fusion_table(cursor):
 	return 0
 
 
-def create_spell_fusion_table(cursor):
+def create_spell_fusion_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -263,13 +263,13 @@ def create_spell_fusion_table(cursor):
 	return 0
 
 
-def create_xyz_class_table(cursor):
+def create_xyz_class_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the XYZ_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
@@ -291,13 +291,13 @@ def create_xyz_class_table(cursor):
 	return 0
 
 
-def create_link_class_table(cursor):
+def create_link_class_table(cursor: sqlite3.Cursor):
 	'''
 	Initialize the Link_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	cursor
+	cursor: sqlite3.Cursor
 
 	Returns
 	-------
