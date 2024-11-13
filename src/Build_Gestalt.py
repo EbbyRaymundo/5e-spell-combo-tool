@@ -70,7 +70,6 @@ def create_class_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE Class(
@@ -96,7 +95,6 @@ def create_fusion_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE Fusion(
@@ -126,7 +124,6 @@ def create_xyz_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE XYZ(
@@ -158,7 +155,6 @@ def create_link_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE Link(
@@ -190,7 +186,6 @@ def create_spell_class_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE Spell_Class(
@@ -219,7 +214,42 @@ def create_spell_fusion_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
+	cursor.execute(
+		"""
+		CREATE TABLE Spell_Fusion(
+			spell_id INTEGER NOT NULL,
+			fusion_id INTEGER NOT NULL,
+			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
+			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id) ON DELETE CASCADE,
+			PRIMARY KEY (spell_id, fusion_id)
+		)
+		"""
+	)
 
+	# this index will optimize the get_Fusion_targets() function in Query_Gestalt.py
+	cursor.execute(
+		"""
+		CREATE INDEX Spell_Fusion_fusion_id_idx 
+		ON Spell_Fusion(fusion_id)
+		"""
+		)
+
+	return 0
+
+
+def create_spell_fusion_table(cursor):
+	'''
+	Initialize the Spell_Fusion junction table with FK constraints.
+
+	Parameters
+	----------
+	cursor
+
+	Returns
+	-------
+	0: int
+		Function successful.
+	'''
 	cursor.execute(
 		"""
 		CREATE TABLE Spell_Fusion(
@@ -248,7 +278,6 @@ def create_xyz_class_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE XYZ_Class(
@@ -277,7 +306,6 @@ def create_link_class_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-
 	cursor.execute(
 		"""
 		CREATE TABLE Link_Class(
@@ -289,6 +317,7 @@ def create_link_class_table(cursor: adbc.Cursor):
 		)
 		"""
 	)
+
 
 def main():
 
