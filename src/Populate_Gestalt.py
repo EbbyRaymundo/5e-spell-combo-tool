@@ -2,6 +2,8 @@ import adbc_driver_sqlite.dbapi as adbc
 import polars as pl
 import Import_Spells
 
+
+
 def populate_main_tables(
 		connection: adbc.Connection,
 		spell_DataFrame: pl.DataFrame,

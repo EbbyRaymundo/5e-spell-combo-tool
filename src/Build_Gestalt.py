@@ -9,21 +9,24 @@ tables.
 
 
 
-def create_spell_table(connection: adbc.Cursor):
+def create_spell_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Spell table with constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
 	0: int
 		Function successful.
 	'''
+	# should experience speedups and only run this once so do it in
+	# the most important table
+	cursor.execute("PRAGMA journal_mode = WAL;")
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Spell (
 			spell_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -44,7 +47,7 @@ def create_spell_table(connection: adbc.Cursor):
 	
 
 	# this index will optimize the Accel Synchro queries in Query_Gestalt.py
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE INDEX Spell_school_casting_time_level_idx
 		ON Spell(school, casting_time, level)
@@ -54,13 +57,13 @@ def create_spell_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_class_table(connection: adbc.Cursor):
+def create_class_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Class table with the PK constraint.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -68,7 +71,7 @@ def create_class_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Class(
 			character_class_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -80,13 +83,13 @@ def create_class_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_fusion_table(connection: adbc.Cursor):
+def create_fusion_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Fusion table with the PK constraint.
 
 	Paramters
 	---------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -94,7 +97,7 @@ def create_fusion_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Fusion(
 			fusion_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -110,13 +113,13 @@ def create_fusion_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_xyz_table(connection: adbc.Cursor):
+def create_xyz_table(cursor: adbc.Cursor):
 	'''
 	Initialize the XYZ table with constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -124,7 +127,7 @@ def create_xyz_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE XYZ(
 			xyz_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -142,13 +145,13 @@ def create_xyz_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_link_table(connection: adbc.Cursor):
+def create_link_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Link table with constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -156,7 +159,7 @@ def create_link_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Link(
 			link_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -174,13 +177,13 @@ def create_link_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_spell_class_table(connection: adbc.Cursor):
+def create_spell_class_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Spell_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -188,7 +191,7 @@ def create_spell_class_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Spell_Class(
 			spell_id INTEGER NOT NULL,
@@ -203,13 +206,13 @@ def create_spell_class_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_spell_fusion_table(connection: adbc.Cursor):
+def create_spell_fusion_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Spell_Fusion junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -217,7 +220,7 @@ def create_spell_fusion_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Spell_Fusion(
 			spell_id INTEGER NOT NULL,
@@ -232,13 +235,13 @@ def create_spell_fusion_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_xyz_class_table(connection: adbc.Cursor):
+def create_xyz_class_table(cursor: adbc.Cursor):
 	'''
 	Initialize the XYZ_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -246,7 +249,7 @@ def create_xyz_class_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE XYZ_Class(
 			xyz_id INTEGER NOT NULL,
@@ -261,13 +264,13 @@ def create_xyz_class_table(connection: adbc.Cursor):
 	return 0
 
 
-def create_link_class_table(connection: adbc.Cursor):
+def create_link_class_table(cursor: adbc.Cursor):
 	'''
 	Initialize the Link_Class junction table with FK constraints.
 
 	Parameters
 	----------
-	connection: adbc.Cursor
+	cursor: adbc.Cursor
 
 	Returns
 	-------
@@ -275,7 +278,7 @@ def create_link_class_table(connection: adbc.Cursor):
 		Function successful.
 	'''
 
-	connection.execute(
+	cursor.execute(
 		"""
 		CREATE TABLE Link_Class(
 			link_id INTEGER NOT NULL,
@@ -292,6 +295,7 @@ def main():
 	with adbc.connect("../Gestalt.db") as connection:
 
 		with connection.cursor() as cursor:
+
 			# main tables
 			create_spell_table(cursor)
 			create_class_table(cursor)

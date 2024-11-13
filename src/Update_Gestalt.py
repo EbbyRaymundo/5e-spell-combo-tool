@@ -1,3 +1,5 @@
+import adbc_driver_sqlite.dbapi as adbc
+import polars as pl
 '''
 This file adds new spells into Gestalt.db and handles
 the appropriate junction table insertions.
@@ -163,6 +165,17 @@ def associate_classes(connection, spell_id: int, character_classes: list[int]):
 
 	
 def main():
+
+	with adbc.connect("../Gestalt.db") as connection:
+	
+		with connection.cursor() as cursor:
+
+			cursor.execute("PRAGMA foreign_keys = ON")
+
+		connection.commit()
+
+		# use update functions here since the pl write_database( )
+		# functions can only take a Connection object
 
 	return 0
 
