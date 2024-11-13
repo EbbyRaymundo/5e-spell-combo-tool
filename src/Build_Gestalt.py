@@ -237,34 +237,6 @@ def create_spell_fusion_table(cursor: adbc.Cursor):
 	return 0
 
 
-def create_spell_fusion_table(cursor):
-	'''
-	Initialize the Spell_Fusion junction table with FK constraints.
-
-	Parameters
-	----------
-	cursor
-
-	Returns
-	-------
-	0: int
-		Function successful.
-	'''
-	cursor.execute(
-		"""
-		CREATE TABLE Spell_Fusion(
-			spell_id INTEGER NOT NULL,
-			fusion_id INTEGER NOT NULL,
-			FOREIGN KEY (spell_id) REFERENCES Spell(spell_id) ON DELETE CASCADE,
-			FOREIGN KEY (fusion_id) REFERENCES Fusion(fusion_id) ON DELETE CASCADE,
-			PRIMARY KEY (spell_id, fusion_id)
-		)
-		"""
-	)
-
-	return 0
-
-
 def create_xyz_class_table(cursor: adbc.Cursor):
 	'''
 	Initialize the XYZ_Class junction table with FK constraints.
