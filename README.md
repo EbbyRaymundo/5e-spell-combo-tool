@@ -1,6 +1,6 @@
 
 # 5e Spell Combo Tool
-This tool is a database with functions for querying and adding custom 5e spells. A database preloaded with the [SRD 5.1 spell content](#notice-of-srd-51-content) is already provided for you. The spells intended to be added to the database are standard, [XYZ](#xyz-spellcasting), [Fusion](#fusion-spellcasting), and [Link](#link-spellcasting) spells. Rather than adding [Synchro](#synchro-spellcasting) spells (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and [Accel Synchro](#accelerated-synchro-spellcasting-aka-accel-synchro) targets.
+This tool is a database with functions for querying and adding custom 5e spells. A database preloaded with the [SRD 5.1 spell content](#notice-of-srd-51-content) is already provided for you. The spells intended to be added to the database are standard spells, [XYZ spells](#xyz-spellcasting), [Fusion spells](#fusion-spellcasting), and [Link spells](#link-spellcasting). Rather than adding [Synchro spells](#synchro-spellcasting) to the database (it wouldn't make sense since it's just fancy upcasting), you can use querying to find Synchro compatible spells and [Accel Synchro](#accelerated-synchro-spellcasting-aka-accel-synchro) targets.
 
 - [5e Spell Combo Tool](#5e-spell-combo-tool)
 - [Dependencies](#dependencies)
