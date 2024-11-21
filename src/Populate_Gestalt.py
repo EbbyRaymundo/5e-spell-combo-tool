@@ -93,7 +93,7 @@ def main():
 
 		connection.commit()
 
-		spell_table, class_table, spell_class_table = Import_Spells.format_spell_csv("../spell_data/Spells.csv")
+		spell_table, class_table, spell_class_table = Import_Spells.import_standard_spells("../spell_data/Spells.csv")
 		#fusion_table, spell_fusion_table = Import_Spells.import_default_fusions("../spell_data/aleisters_fusion_spells.csv")
 		xyz_table, xyz_class_table = Import_Spells.import_default_xyz("../spell_data/kites_xyz_spells.csv")
 		link_table, link_class_table = Import_Spells.import_default_links("../spell_data/aleisters_link_spells.csv")

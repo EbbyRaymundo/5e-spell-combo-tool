@@ -229,16 +229,7 @@ def import_default_xyz(csv_name: str):
 	xyz_table = (
 		pl.scan_csv(
 			source = csv_name,
-			has_header = True,
-			new_columns = [
-				"xyz_name",
-				"rank",
-				"casting_time",
-				"duration",
-				"range",
-				"components",
-				"description",
-			]
+			has_header = True
 		)
 		.with_columns(
 			# rank is the only int column. stripping just to be safe :^)
@@ -268,16 +259,7 @@ def import_default_links(csv_name: str):
 	link_table = (
 		pl.scan_csv(
 			source = csv_name,
-			has_header = True,
-			new_columns = [
-				"link_name",
-				"rating",
-				"casting_time",
-				"duration",
-				"range",
-				"components",
-				"description",
-			]
+			has_header = True
 		)
 		.with_columns(
 			# rank is the only int column. stripping just to be safe :^)
@@ -299,10 +281,17 @@ def import_default_links(csv_name: str):
 	return link_table.collect(), class_availability.collect()
 
 
-def import_default_fusions(csv_name: str):
+def import_default_fusions(csv_name: str, spell_table: pl.DataFrame):
 	# TODO: read in the default Fusions csv, construct a table out of it
 	#		then search for the referenced spells in main spell table,
 	#		and create a junction table.
+
+	fusion_table = (
+		pl.scan_csv(
+			source = csv_name,
+			has_header = True
+		)
+	)
 
 	"""fusion_table = pd.DataFrame()
 	spell_fusion_table = pd.DataFrame()"""
@@ -314,8 +303,8 @@ def main():
 	
 	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
 	#xyz_table, xyz_class = import_default_xyz("../spell_data/kites_xyz_spells.csv")
-	spell_table, dnd_classes, class_availability = format_spell_csv("../spell_data/Spells.csv")
-	print(spell_table.select(pl.col("duration")).head(15))
+	spell_table, dnd_classes, class_availability = import_standard_spells("../spell_data/Spells.csv")
+	print(spell_table.select(pl.col("duration")).head(10))
 
 	return 0
 
