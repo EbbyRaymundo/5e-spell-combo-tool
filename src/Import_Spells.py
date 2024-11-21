@@ -286,22 +286,41 @@ def import_default_fusions(csv_name: str, spell_table: pl.DataFrame):
 	#		then search for the referenced spells in main spell table,
 	#		and create a junction table.
 
-	fusion_table = (
-		pl.scan_csv(
-			source = csv_name,
-			has_header = True
-		)
+	fusion_table = 	(
+		pl.scan_csv(source = csv_name, has_header = True)
 		.with_columns(
-			# rank is the only int column. stripping just to be safe :^)
-			pl.all().str.strip_chars()
+			# concentration is the only bool column. stripping just to be safe :^)
+			pl.all().exclude("concentration").str.strip_chars()
 		)
 		.with_row_index("fusion_id")
+
 	)
 
-	"""fusion_table = pd.DataFrame()
-	spell_fusion_table = pd.DataFrame()"""
+	# create a junction table by selecting out the fusion_id and components column,
+	# listify the components column, explode those lists, join the spell_names
+	# with the spell_names and their spell_id's from the spell_table, then drop
+	# the spell_name column for our result
+	spell_fusion_table = (
+		fusion_table.select(
+			pl.col("fusion_id"),
+			pl.col("components")
+			.str.split(by = ", ")
+			.alias("spell_name")
+		)
+		.explode("spell_name")
+		.join(
+			other = spell_table.select("spell_id", "spell_name").lazy(),
+			on = "spell_name",
+			how = "left"
+		)
+		.select(
+			# column reorder and dropping the spell_name column
+			pl.col("spell_id"),
+			pl.col("fusion_id")
+		)
+	)
 
-	return #fusion_table, spell_fusion_table
+	return fusion_table.drop("components").collect(), spell_fusion_table.collect()
 
 
 def main():
@@ -309,8 +328,10 @@ def main():
 	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
 	#xyz_table, xyz_class = import_default_xyz("../spell_data/kites_xyz_spells.csv")
 	spell_table, dnd_classes, class_availability = import_standard_spells("../spell_data/Spells.csv")
-	print(spell_table.select(pl.col("duration")).head(10))
-
+	fusion_table, spell_fusion_table = import_default_fusions("../spell_data/aleisters_fusion_spells.csv", spell_table)
+	print(fusion_table)
+	print(spell_fusion_table)
+	
 	return 0
 
 
