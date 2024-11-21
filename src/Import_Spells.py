@@ -114,6 +114,7 @@ def format_spell_csv(csv_name: str):
 		),
 
 		pl.col("duration").str.strip_chars().str.strip_prefix("Concentration, ")
+		.map_elements(lambda duration: duration.capitalize(), return_dtype = pl.String)
 		.str.replace_all(
 			pattern = "minute(s)?",
 			value = "Min."
@@ -121,8 +122,7 @@ def format_spell_csv(csv_name: str):
 		.str.replace_all(
 			pattern = "hour(s)?",
 			value = "Hr."
-		)
-		.map_elements(lambda duration: duration.capitalize(), return_dtype = pl.String),
+		),
 
 		pl.col("school").str.strip_chars().str.strip_suffix(" (ritual)"),
 
@@ -314,10 +314,8 @@ def main():
 	
 	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
 	#xyz_table, xyz_class = import_default_xyz("../spell_data/kites_xyz_spells.csv")
-	link_table, link_class = import_default_links("../spell_data/aleisters_link_spells.csv")
-	print(link_table.head(10))
-	print(link_table.height)
-	print(link_class.height)
+	spell_table, dnd_classes, class_availability = format_spell_csv("../spell_data/Spells.csv")
+	print(spell_table.select(pl.col("duration")).head(15))
 
 	return 0
 
