@@ -262,7 +262,7 @@ def import_default_links(csv_name: str):
 			has_header = True
 		)
 		.with_columns(
-			# rank is the only int column. stripping just to be safe :^)
+			# rating is the only int column. stripping just to be safe :^)
 			pl.all().exclude("rating").str.strip_chars()
 		)
 		.with_row_index("link_id")
@@ -291,6 +291,11 @@ def import_default_fusions(csv_name: str, spell_table: pl.DataFrame):
 			source = csv_name,
 			has_header = True
 		)
+		.with_columns(
+			# rank is the only int column. stripping just to be safe :^)
+			pl.all().str.strip_chars()
+		)
+		.with_row_index("fusion_id")
 	)
 
 	"""fusion_table = pd.DataFrame()
