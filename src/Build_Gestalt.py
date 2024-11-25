@@ -22,10 +22,6 @@ def create_spell_table(cursor: adbc.Cursor):
 	0: int
 		Function successful.
 	'''
-	# should experience speedups and only run this once so do it in
-	# the most important table
-	cursor.execute("PRAGMA journal_mode = WAL;")
-
 	cursor.execute(
 		"""
 		CREATE TABLE Spell (

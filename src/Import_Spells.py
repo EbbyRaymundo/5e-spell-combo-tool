@@ -329,9 +329,8 @@ def main():
 	#spell_table, dnd_classes, all_availability = format_spell_csv("../spell_data/all_5e_spells.csv")
 	#xyz_table, xyz_class = import_default_xyz("../spell_data/kites_xyz_spells.csv")
 	spell_table, dnd_classes, class_availability = import_standard_spells("../spell_data/Spells.csv")
-	#fusion_table, spell_fusion_table = import_default_fusions("../spell_data/aleisters_fusion_spells.csv", spell_table)
-	print(spell_table.tail())
-	print(class_availability.filter(pl.col("spell_id") == 320))
+	fusion_table, spell_fusion_table = import_default_fusions("../spell_data/aleisters_fusion_spells.csv", spell_table)
+	spell_fusion_table.write_csv(file = "../spell_data/spell_fusion.csv")
 	
 	return 0
 
