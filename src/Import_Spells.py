@@ -88,58 +88,6 @@ def import_standard_spells(csv_name: str):
 		)
 	)
 
-	print(master_table.collect_schema())
-
-	polymerization_spells = pl.LazyFrame(
-		data = {
-			"spell_name": ["Polymerization", "Super Polymerization"],
-			"level": ['1', '4'],
-			"casting_time": ["Action", "Reaction"],
-			"duration":["Instantaneous", "Instantaneous"],
-			"school": ["Transmutation", "Transmutation"],
-			"range": ["Self", "Self"],
-			"components": ["V, S, M (At least 2 spells)", "V, S, M (At least 2 spells)"],
-			"character_classes": ["Sorcerer, Bard, Warlock, Ranger", "Sorcerer, Bard, Warlock, Ranger"],
-			"optional_classes":[None, None],
-			"description":[
-				(
-					"You attempt to fuse 2 or more spells in order to create a more powerful version " 
-					"that combines their aspects in some way. If you consume a number of sorcery points "
-					"equal to the total level of both spells, you can use Polymerization without having "
-					"to actually cast the spells if their casting time is 1 Action or less. Both spell "
-					"slots are consumed as if you had cast them."
-	 			),
-				(
-					"You attempt to fuse 2 or more spells in order to create a more powerful version "
-					"that combines their aspects in some way. If you consume a number of sorcery points "
-					"equal to the total level of both spells, you can use Super Polymerization without "
-					"having to actually cast the spells if their casting time is 1 Action or less. "
-					"Both spell slots are consumed as if you had cast them. You may also use spells that "
-					"your opponent is currently casting or has already cast whose effect remains. "
-					"No one may attempt to interrupt the casting of this spell."
-				)
-	 		],
-			"upcast_effect": [None, None]
-		},
-		schema = {
-			"spell_name": pl.String,
-			"level": pl.String,
-			"casting_time": pl.String,
-			"duration": pl.String,
-			"school": pl.String,
-			"range": pl.String,
-			"components": pl.String,
-			"character_classes": pl.String,
-			"optional_classes": pl.String,
-			"description": pl.String,
-			"upcast_effect": pl.String
-		}
-	)
-
-	print(polymerization_spells.collect_schema())
-
-	master_table = pl.concat([master_table, polymerization_spells])
-
 	spell_table = (master_table.select(
 			
 		pl.col("spell_name").str.strip_chars(),
