@@ -7,7 +7,7 @@ the appropriate junction table insertions.
 
 
 
-def add_spell(connection, spell, character_classes: list[int] = None):
+def add_spell(connection: adbc.Connection, spell: pl.DataFrame, character_classes: list[int] = None):
 	'''
 	Add the standard spell into the Spell table and associate
 	the spell with every character class unless provided a list
